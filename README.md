@@ -8,3 +8,4 @@ This has been produced under a Debian Jessy OS
 Some requierement :
   - xRITDecompress tools, free, available at http://www.eumetsat.int/website/home/Data/DataDelivery/SupportSoftwareandTools/index.html
   - Pytroll librairies : mipp (0.9.2) and mpop (1.2.1) (https://github.com/pytroll)
+  - Gdal with python extension (2.0.2)
