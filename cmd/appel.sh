@@ -12,14 +12,7 @@ for i in /home/user/firemsg/Auto/compressed/L*C_
 	DD=${temp:87:2}
     HHMM=${temp:89:4}
 	cd /home/user/firemsg/Auto/decompressed
-	mkdir $(echo $YYYY)
-	cd /home/user/firemsg/Auto/decompressed/$YYYY
-	mkdir $(echo $MM)
-	cd /home/user/firemsg/Auto/decompressed/$YYYY/$MM
-	mkdir $(echo $DD)
-	cd /home/user/firemsg/Auto/decompressed/$YYYY/$MM/$DD
-    mkdir $(echo $HHMM)
-    cd /home/user/firemsg/Auto/decompressed/$YYYY/$MM/$DD/$HHMM
+	mkdir -p $YYYY/$MM/$DD/$HHMM
     mv $i /home/user/firemsg/Auto/archive
 done
 	
