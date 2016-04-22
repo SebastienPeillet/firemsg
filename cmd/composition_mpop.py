@@ -62,7 +62,7 @@ except:
 
 ############FORMATAGE OUTPUT############
 try:
-    outpath='/home/user/firemsg/Auto/img_brute/'+time_path+'/'
+    outpath='/home/user/firemsg/Auto/img_raw/'+time_path+'/'
     file_name=outpath+'LRIT-MSG3-RA-%s%s%s-%s%s-8b.tiff' % (YYYY, MM, DD, hh, mm)
     file_name16b=outpath+'LRIT-MSG3-RA-%s%s%s-%s%s-16b.tiff' % (YYYY, MM, DD, hh, mm)
     print "\nFORMATAGE SORTIE : OK\n"
