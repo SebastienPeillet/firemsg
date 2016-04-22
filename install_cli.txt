@@ -1,0 +1,41 @@
+#Traceur installation
+
+
+#dependence pour installation des bibliotheques (as root)
+apt-get cmake setuptools libpython-dev g++ cmake-curses-gui build-essential qt4-dev-tools libqt4-core libqt4-dev libboost1.55-dev zlib1g-dev libopencv-dev curl libcurl4-openssl-dev swig
+
+
+#PublicDecompWT (as root)
+    cd /home/user/firemsg/PublicDecompWT/xRITDecompress
+    make
+    cp xRITDecompress /usr/local/bin
+
+
+#Python mipp mpop (as user)
+- mpop
+
+    cd /home/user/firemsg/python
+    git clone https://github.com/pytroll/mpop.git
+    cd mpop
+    python setup.py install --user
+    cd ../../pytroll_config
+    cp * /home/user/firemsg/python/mpop
+
+- mipp
+
+    cd /home/user/firemsg/python
+    git clone https://github.com/pytroll/mipp.git
+    git checkout pre-master
+    git pull
+    cd mipp
+    python setup.py install --user
+
+#OTB http://jordiinglada.net/wp/2015/05/27/installing-otb-has-never-been-so-easy-8/
+
+    cd /home/user/firemsg
+    mkdir OTB
+    cd OTB
+    git clone https://git@git.orfeo-toolbox.org/git/otb.git OTB
+    cd ../
+    wget https://www.orfeo-toolbox.org/packages/SuperBuild-archives-trunk.tar.bz2
+    tar xvjf SuperBuild-archives-trunk.tar.bz2
