@@ -8,8 +8,9 @@ import scipy as sp
 from numpy import amax
 import temperature
 
-data_path='/home/user/firemsg/Auto/img_brute/'+os.environ['MSG_DATA_PATH']+'/*16b*'
-data=gdal.Open('/home/user/firemsg/Auto/img_brute/2016/04/18/1445/LRIT-MSG3-RA-2016418-1445-16b.tiff')
+data_path='/home/user/firemsg/Auto/img_raw/'+os.environ['MSG_DATA_PATH']+'/*16b*'
+# /!\ the asterix doesn't work, even if there is only one file...
+data=gdal.Open(datapath)
 band=data.GetRasterBand(1)
 band_data=band.ReadAsArray()
 
