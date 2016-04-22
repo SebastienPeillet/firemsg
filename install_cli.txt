@@ -39,3 +39,19 @@ apt-get cmake setuptools libpython-dev g++ cmake-curses-gui build-essential qt4-
     cd ../
     wget https://www.orfeo-toolbox.org/packages/SuperBuild-archives-trunk.tar.bz2
     tar xvjf SuperBuild-archives-trunk.tar.bz2
+    mkdir -p SuperBuild/OTB
+    cd SuperBuild/OTB
+    cmake \
+    -DCMAKE_CXX_FLAGS:STRING=-std=c++14 \
+    -DOTB_WRAP_PYTHON:BOOL=ON \
+    -DCMAKE_BUILD_TYPE:STRING=Release \
+    -DCMAKE_INSTALL_PREFIX:PATH=/home/otb/OTB/SuperBuild/ \
+    -DDOWNLOAD_LOCATION:PATH=/home/otb/OTB/SuperBuild-archives/ \
+    -DOTB_USE_OPENJPEG:BOOL=ON \
+    -DUSE_SYSTEM_OPENJPEG:BOOL=OFF \
+    ../../OTB/SuperBuild/
+    make -j4
+    
+    cd
+    echo "\nexport OTB_HOME=${HOME}/OTB/SuperBuild\nexport PATH=${OTB_HOME}/bin:$PATH\nexport LD_LIBRARY_PATH=${OTB_HOME}/lib">>.bashrc
+    
