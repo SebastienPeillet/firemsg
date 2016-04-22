@@ -1,0 +1,1 @@
+This file will be overwrite every time the ftp.sh runs
