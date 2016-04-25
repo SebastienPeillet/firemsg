@@ -55,3 +55,7 @@ apt-get cmake setuptools libpython-dev g++ cmake-curses-gui build-essential qt4-
     cd
     echo "\nexport OTB_HOME=${HOME}/OTB/SuperBuild\nexport PATH=${OTB_HOME}/bin:$PATH\nexport LD_LIBRARY_PATH=${OTB_HOME}/lib">>.bashrc
     
+cmake\
+    -DCMAKE_INSTALL_PREFIX=~/ICE/install \
+    -DOTB_DIR=~/OTB/install/lib/cmake/OTB-5.0 \
+    ../ice 
