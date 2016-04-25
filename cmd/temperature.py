@@ -1,3 +1,4 @@
+import os
 from osgeo import gdal
 from osgeo import ogr
 from osgeo import osr
@@ -6,7 +7,7 @@ from osgeo import gdalconst
 import scipy as sp
 import numpy as np
 
-def temperature(indata):
+def temperaturebis(indata):
 
 	[H,W]=indata.shape
 	dtype=indata.dtype
@@ -27,7 +28,7 @@ def temperature(indata):
 				kelvin[i,j]=((C2*vc/np.log(C1*vc**3/temp+1)-B)/A)
 	return kelvin
 	
-def temperaturebis(indata):
+def temperature(indata):
 
 	C1 = 1.19104273e-16
 	C2 = 0.0143877523
@@ -38,14 +39,32 @@ def temperaturebis(indata):
 	kelvin = ((C2 * 100. * vc / np.log(C1 * 1.0e6 * vc ** 3 / (1.0e-5 * indata.astype(np.float)) + 1)) - beta) / alpha
 	return np.ma.masked_invalid(kelvin, copy=False)
 	
-def fire(indata) :
+def potentialfire(indata039,indata108) :
+    
+    [H,W]=indata039.shape
+    dtype=indata039.dtype
+    potfire=sp.empty((H,W),dtype='int32')
+    
+    time=os.environ["MSG_DATA_PATH"]
+    time_tab=time.split('/')
+    hh=int((time_tab[3])[0:2])
 
-	[H,W]=indata.shape
-	dtype=indata.dtype
-	potfire=sp.empty((H,W),dtype='int32')
-	
-	temps=TIME_SLOT
-	return potfire
+    for i in range(0,H):
+        for j in range(0,W):
+            img039=indata039[i,j]
+            img108=indata108[i,j]
+            delta= img039-img108
+            if hh >= 8 and hh< 18:
+                if img039>315 and delta>10 :
+                    potfire[i,j]=1
+                else:
+                    potfire[i,j]=0
+            else :
+                if img039>310 and delta>5 :
+                    potfire[i,j]=1
+                else:
+                    potfire[i,j]=0
+    return potfire
 
 def sauvegarde(indata,name='save.tiff'):
 	driver=gdal.GetDriverByName("GTiff")

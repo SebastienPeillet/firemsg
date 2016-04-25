@@ -16,7 +16,7 @@ import numpy
 import datetime
 
 #decommenter pour plus d'information du aux outils pytroll lors du traitement
-#debug_on()
+debug_on()
 
 
 ############FORMATAGE VARIABLE TEMPS############
@@ -63,8 +63,8 @@ except:
 ############FORMATAGE OUTPUT############
 try:
     outpath='/home/user/firemsg/Auto/img_raw/'+time_path+'/'
-    file_name=outpath+'LRIT-MSG3-RA-%s%s%s-%s%s-8b.tiff' % (YYYY, MM, DD, hh, mm)
-    file_name16b=outpath+'LRIT-MSG3-RA-%s%s%s-%s%s-16b.tiff' % (YYYY, MM, DD, hh, mm)
+    file_name=outpath+'LRIT-MSG3-RA-%s%s%s-%s%s-8b' % (YYYY, MM, DD, hh, mm)
+    file_name16b=outpath+'LRIT-MSG3-RA-%s%s%s-%s%s-16b' % (YYYY, MM, DD, hh, mm)
     print "\nFORMATAGE SORTIE : OK\n"
 except:
     print"\nFormatage fichiers sortie echoue"
@@ -72,17 +72,22 @@ except:
 
 ############SAUVEGARDE DES FICHIERS IMAGES############
 try:
-    # img=global_data.image.channel_image(0.6)
+    # img=data.image.channel_image(0.6)
     # img.save("/home/USER/Auto/img_brute/test0.png")
-    # img=global_data.image.channel_image(1.6)
+    # img=data.image.channel_image(1.6)
     # img.save("/home/USER/Auto/img_brute/test1.png")
-    img=data.image.channel_image(3.9)
-    img.save(file_name)
-    img.save(file_name16b, tags={"NBITS":'16'})
-    # img=global_data.image.channel_image(6.2)
+    img039=data.image.channel_image(3.9)
+    file_name039=file_name+'-039.tiff'
+    img039.save(file_name039)
+    file_name16b039=file_name16b+'-039.tiff'
+    img039.save(file_name16b039, tags={"NBITS":'16'})
+    # img=data.image.channel_image(6.2)
     # img.save("/home/USER/Auto/img_brute/test3.png")
-    # img=global_data.image.channel_image(10.8)
-    # img.save("/home/USER/Auto/img_brute/test4.png")
+    img108=data.image.channel_image(10.8)
+    file_name108=file_name+'-108.tiff'
+    img108.save(file_name108)
+    file_name16b108=file_name16b+'-108.tiff'
+    img108.save(file_name16b108, tags={"NBITS":'16'})
     print "\nSAUVEGARDE FICHIER IMAGE : OK\n"
 except:
     print"\nSauvegarde fichiers sortie echoue"
