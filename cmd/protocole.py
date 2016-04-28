@@ -34,6 +34,9 @@ band039_data=band039.ReadAsArray()
 band108_data=band108.ReadAsArray()
 
 out039=temperature.temperature(band039_data)
+print '\n'
+print (out039.min(),out039.max())
+print '\n'
 out108=temperature.temperature(band108_data)
 
 #out=temp_data.astype(int)
