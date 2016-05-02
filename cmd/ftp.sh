@@ -33,5 +33,3 @@ cd lrit3h
 mget *$time_slot*
 quit
 EOF
-
-export TIME_SLOT=$time_slot

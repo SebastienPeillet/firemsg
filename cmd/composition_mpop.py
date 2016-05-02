@@ -16,7 +16,7 @@ import numpy
 import datetime
 
 #decommenter pour plus d'information du aux outils pytroll lors du traitement
-debug_on()
+#debug_on()
 
 
 ############FORMATAGE VARIABLE TEMPS############
@@ -48,16 +48,17 @@ except:
 	print "\nChargement des parametres satellites echoue, verifiez la presecence du fichier meteosat10.cfg a la racine de mpop."
 
 try:
-	globe=get_area_def("met09globeFull")
+	globe=get_area_def("AfSubSahara")
 except:
 	print "\nChargement des parametres de zone echoue, verifiez la presecence du fichier areas.def a la racine de mpop."
     
 try:
-	global_data.load([0.6,1.6,3.9,6.2,10.8],area_extent=globe.area_extent,calibrate=2)
-	print global_data
+	global_data.load([0.6,1.6,3.9,6.2,10.8],area_extent=globe.area_extent,calibrate=1)
 	print global_data[3.9].data.min()
 	print global_data[3.9].data.max()
-	data=global_data.project("met09globeFull")
+	print global_data[10.8].data.min()
+	print global_data[10.8].data.max()
+	data=global_data.project("AfSubSahara")
 	print "\nChargement des donnees par mpop : OK"
 except:
 	print"\nChargement des donnes echoue, verifiez la presence des donnees et leur correspondance a la fenetre de temps donnee."
@@ -65,11 +66,16 @@ except:
 
 ############FORMATAGE OUTPUT############
 try:
-	outpath='/home/user/firemsg/Auto/img_raw/'+time_path+'/'
-	file_name16b=outpath+'LRIT-MSG3-RA-%s%s%s-%s%s-16b' % (YYYY, MM, DD, hh, mm)
+	outpath='/home/user/firemsg/Auto/img_RA/'+time_path+'/'
+	file_name16b=outpath+'LRIT-MSG3-RA-%s%s%s-%s%s' % (YYYY, MM, DD, hh, mm)
 	print "\nFORMATAGE SORTIE : OK\n"
 except:
 	print"\nFormatage fichiers sortie echoue"
+
+try :
+    os.makedirs(outpath)
+except:
+    print 'out path already exists'
 
 
 ############SAUVEGARDE DES FICHIERS IMAGES############
@@ -80,7 +86,7 @@ try:
 	# img.save("/home/USER/Auto/img_brute/test1.png")
 	img039=data.image.channel_image(3.9)
 	file_name16b039=file_name16b+'-039.tiff'
-	img039.save(file_name16b039, tags={"NBITS":'16'},floating_point=True )
+	img039.save(file_name16b039,tags={"NBITS":'16'}, floating_point=True)
 	# img=data.image.channel_image(6.2)
 	# img.save("/home/USER/Auto/img_brute/test3.png")
 	img108=data.image.channel_image(10.8)

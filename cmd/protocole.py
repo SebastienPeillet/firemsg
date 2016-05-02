@@ -20,9 +20,9 @@ try:
 except :
     print "\nMSG_DATA_PATH non definie. Dans le cas\nd'une utilisation hors chaine veuillez preciser MSG_DATA_PATH\ndans une console par laquelle vous lancerez composition_mpop.py\ntel que : export MSG_DATA_PATH=path/to/data"
 
-inpath='/home/user/firemsg/Auto/img_raw/'+time_path+'/'
-infile_name039=inpath+'LRIT-MSG3-RA-%s%s%s-%s%s-16b-039.tiff' % (YYYY, MM, DD, hh, mm)
-infile_name108=inpath+'LRIT-MSG3-RA-%s%s%s-%s%s-16b-108.tiff' % (YYYY, MM, DD, hh, mm)
+inpath='/home/user/firemsg/Auto/img_RA/'+time_path+'/'
+infile_name039=inpath+'LRIT-MSG3-RA-%s%s%s-%s%s-039.tiff' % (YYYY, MM, DD, hh, mm)
+infile_name108=inpath+'LRIT-MSG3-RA-%s%s%s-%s%s-108.tiff' % (YYYY, MM, DD, hh, mm)
 
 data039=gdal.Open(infile_name039)
 data108=gdal.Open(infile_name108)
@@ -33,12 +33,12 @@ band108=data108.GetRasterBand(1)
 band039_data=band039.ReadAsArray()
 band108_data=band108.ReadAsArray()
 
-out039=temperature.temperature(band039_data)
+out039=temperature.temperature039(band039_data)
 print '\n'
 print (out039.min(),out039.max())
 print '\n'
-out108=temperature.temperature(band108_data)
-
+out108=temperature.temperature108(band108_data)
+print (out108.min(),out108.max())
 #out=temp_data.astype(int)
 
 outpath='/home/user/firemsg/Auto/img_BT/'+time_path+'/'
