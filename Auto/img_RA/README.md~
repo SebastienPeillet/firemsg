@@ -1,3 +1,6 @@
-IMAGE RAW
+#img_PF
 
-Image raw output after composition.sh script. Store tiff data in radiance
+MSG potential fire detect.
+Binary image code in 0 (non fire) and 1 (potential fire)
+Produced by the firemsg/cmd/seuillage.py script
+Need validation

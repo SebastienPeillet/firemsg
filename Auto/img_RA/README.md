@@ -1,3 +1,4 @@
-IMAGE RA
+#img_RA
 
-Radiance image output after composition.sh script. Store tiff data in radiance
+MSG radiance data.
+Produced by the firemsg/cmd/composition_mpop.py script.

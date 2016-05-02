@@ -64,7 +64,39 @@ try:
 except:
 	print"\nChargement des donnes echoue, verifiez la presence des donnees et leur correspondance a la fenetre de temps donnee."
 
+############FORMATAGE OUTPUT############
+try:
+	outpath='/home/user/firemsg/Auto/img_RA/'+time_path+'/'
+	file_name16b=outpath+'LRIT-MSG3-RA-%s%s%s-%s' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
+	print "\nFORMATAGE SORTIE : OK\n"
+except:
+	print"\nFormatage fichiers sortie echoue"
 
+try :
+    os.makedirs(outpath)
+except:
+    print 'out path already exists'
+
+
+############SAUVEGARDE DES FICHIERS IMAGES RA############
+try:
+	# img=data.image.channel_image(0.6)
+	# img.save("/home/USER/Auto/img_brute/test0.png")
+	# img=data.image.channel_image(1.6)
+	# img.save("/home/USER/Auto/img_brute/test1.png")
+	img039=data.image.channel_image(3.9)
+	file_name16b039=file_name16b+'-039.tiff'
+	img039.save(file_name16b039,tags={"NBITS":'16'}, floating_point=True)
+	# img=data.image.channel_image(6.2)
+	# img.save("/home/USER/Auto/img_brute/test3.png")
+	img108=data.image.channel_image(10.8)
+	file_name16b108=file_name16b+'-108.tiff'
+	img108.save(file_name16b108, tags={"NBITS":'16'},floating_point=True)
+	print "\nSAUVEGARDE FICHIER IMAGE : OK\n"
+except:
+	print"\nSauvegarde fichiers sortie echoue"
+	
+	
 ###############POT FIRE##################
 array039=global_data[3.9].data
 array108=global_data[10.8].data
@@ -96,7 +128,7 @@ for i in range(0,H):
 ############FORMATAGE OUTPUT############
 try:
 	outpath='/home/user/firemsg/Auto/img_PF/'+time_path+'/'
-	outname=outpath+'LRIT-MSG3-PF-%s%s%s-%s%s.tiff' % (YYYY, MM, DD, hh, mm)
+	outname=outpath+'LRIT-MSG3-PF-%s%s%s-%s.tiff' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
 	print "\nFORMATAGE SORTIE : OK\n"
 except:
 	print"\nFormatage fichiers sortie echoue"
