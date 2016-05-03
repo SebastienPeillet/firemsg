@@ -137,7 +137,7 @@ fire[:,:-q]=potfire[:,:-q]
 
 for k in range (q,H-q) :
 	for l in range (q,W-q) :
-		if potfire[k,l]=2 :
+		if potfire[k,l]==2 :
 			potf039=array039[k,l]
 			potf108=array108[k,l]
 			
@@ -152,11 +152,11 @@ for k in range (q,H-q) :
 			deltapotf=potf039-potf108
 			tempdeltapotf=array039[k-q:(k+q+1),l-q:(l+q+1)]-array108[k-q:(k+q+1),l-q:(l+q+1)]
 			meandeltapotf=tempdeltapotf.mean()
-			devdeltapotf=tempdaltapotf.std()
+			devdeltapotf=tempdeltapotf.std()
 			
 			if (
 				deltapotf > (meandeltapotf+3.5*devdeltapotf) and deltapotf > (meandeltapotf+6) and \
-				potf039 > (meanpotf039+3*devpotf039) and potf108>(meanpotf108+devpotf108-4)
+				potf039 > (meanpotf039+3*devpotf039) and potf108>(meanpotf108+devpotf108-4)) :
 				#source Louis Giglio "An enhanced contextual fire detection algorithm for Modis 2003
 				fire[k,l]=2
 			
