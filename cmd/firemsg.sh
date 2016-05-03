@@ -37,6 +37,4 @@ cd /home/user/firemsg/cmd
 
 bash potfire.sh
 
-python gdalcopyproj.py /home/user/firemsg/Auto/img_RA/$outYYYY/$outMM/$outDD/$outHHMM/LRIT-MSG3-RA-$outYYYY$outMM$outDD-$outHHMM-039.tiff /home/user/firemsg/Auto/img_PF/$outYYYY/$outMM/$outDD/$outHHMM/LRIT-MSG3-PF-$outYYYY$outMM$outDD-$outHHMM.tiff 
-
 exit 0
