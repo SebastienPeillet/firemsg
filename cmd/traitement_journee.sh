@@ -1,37 +1,41 @@
 #!usr/bin/sh
 
-#cd /..
-#cd /home/user/firemsg/Auto/compressed
-#hostname="oisftp.eumetsat.org"
-#name="lrit3h_412"
-#password="QSxMzckd"
-#ftp -i -n $hostname <<EOF
-#quote USER $name
-#quote PASS $password
-#cd lrit3h
-#mget *20160502*
-#quit
-#EOF
+cd /..
+cd /home/user/firemsg/Auto/compressed
+hostname="oisftp.eumetsat.org"
+name="lrit3h_412"
+password="QSxMzckd"
+ftp -i -n $hostname <<EOF
+quote USER $name
+quote PASS $password
+binary
+cd lrit3h
+mget *20160503*
+quit
+EOF
 
-#bash appel.sh
+cd /home/user/firemsg/cmd
+bash appel.sh
 
-export MSG_DATA_PATH=2016/05/02/0245
+cd /home/user/firemsg/cmd
+export MSG_DATA_PATH=2016/05/03/0245
 bash potfire.sh
-export MSG_DATA_PATH=2016/05/02/0545
+export MSG_DATA_PATH=2016/05/03/0545
 bash potfire.sh
-export MSG_DATA_PATH=2016/05/02/0845
+export MSG_DATA_PATH=2016/05/03/0845
 bash potfire.sh
-export MSG_DATA_PATH=2016/05/02/1145
+export MSG_DATA_PATH=2016/05/03/1145
 bash potfire.sh
-export MSG_DATA_PATH=2016/05/02/1445
+export MSG_DATA_PATH=2016/05/03/1445
 bash potfire.sh
-export MSG_DATA_PATH=2016/05/02/1745
+export MSG_DATA_PATH=2016/05/03/1745
 bash potfire.sh
-export MSG_DATA_PATH=2016/05/02/2045
+export MSG_DATA_PATH=2016/05/03/2045
 bash potfire.sh
-export MSG_DATA_PATH=2016/05/02/2345
+export MSG_DATA_PATH=2016/05/03/2345
 bash potfire.sh
 
+cd /home/user/firemsg/cmd
 python resume_day.py
 YYYY=${MSG_DATA_PATH:0:4}
 MM=${MSG_DATA_PATH:5:2}
