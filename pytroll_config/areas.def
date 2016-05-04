@@ -22,8 +22,8 @@ REGION: AfSubSahara {
         NAME:          Afrique subsaharienne degree 0
         PCS_ID:        geos0
         PCS_DEF:       proj=geos, lon_0=0.0, a=6378169.00, b=6356583.80, h=35785831.0
-        XSIZE:         2200
-        YSIZE:         1850
+        XSIZE:         2146
+        YSIZE:         1760
         AREA_EXTENT:   (-1815176.8232086236, -3512257.5382710025, 4625242.030266033, 1767937.3415769583)
 };
 
