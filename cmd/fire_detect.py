@@ -105,23 +105,30 @@ array108=global_data[10.8].data
 dtype=array039.dtype
 potfire=sp.empty((H,W),dtype='int32')
 
+countpotf=0
+
 for i in range(0,H):
 	for j in range(0,W):
 		img039=array039[i,j]
 		img108=array108[i,j]
 		delta= img039-img108
 		if hh >= 8 and hh< 18:
-			if (img039>315 and delta>10 and img108>303):
+			if (img039>315 and delta>10 and img108>283):
 				#source metoffice.gov.uk, cloud detection
 				potfire[i,j]=2
 				#print "x="+str(i)+" et y="+str(j)
+				countpotf+=1
 			else:
 				potfire[i,j]=1
 		else :
 			if img039>305 and delta>3 :
 				potfire[i,j]=2
+				countpotf+=1
 			else:
 				potfire[i,j]=1
+				
+print 'countpotf'
+print countpotf
 
 ##########CONTEXTUAL THRESHOLD##########
 fire=sp.empty((H,W),dtype='int32')
@@ -130,10 +137,12 @@ fire=sp.empty((H,W),dtype='int32')
 p=3
 q=(p-1)/2
 
-fire[:q,:]=potfire[:q,:]
-fire[:,:q]=potfire[:,:q]
-fire[:-q,:]=potfire[:-q,:]
-fire[:,:-q]=potfire[:,:-q]
+fire[:q,:]=0
+fire[:,:q]=0
+fire[:-q,:]=0
+fire[:,:-q]=0
+
+countf=0
 
 for k in range (q,H-q) :
 	for l in range (q,W-q) :
@@ -150,19 +159,28 @@ for k in range (q,H-q) :
 			devpotf108=temp108.std()
 			
 			deltapotf=potf039-potf108
+			#print 'deltapotf'
+			#print deltapotf
 			tempdeltapotf=array039[k-q:(k+q+1),l-q:(l+q+1)]-array108[k-q:(k+q+1),l-q:(l+q+1)]
 			meandeltapotf=tempdeltapotf.mean()
+			#print 'meandeltapotf'
+			#print meandeltapotf
 			devdeltapotf=tempdeltapotf.std()
+			#print 'devdeltapotf'
+			#print devdeltapotf
+			countf+=1
 			
-			if (
-				deltapotf > (meandeltapotf+3.5*devdeltapotf) and deltapotf > (meandeltapotf+6) and \
-				potf039 > (meanpotf039+3*devpotf039) and potf108>(meanpotf108+devpotf108-4)) :
+			if deltapotf > (meandeltapotf+3.5*devdeltapotf) and deltapotf > (meandeltapotf+6) and potf039 > (meanpotf039+3*devpotf039) and potf108>(meanpotf108+devpotf108-4) :
 				#source Louis Giglio "An enhanced contextual fire detection algorithm for Modis 2003
 				fire[k,l]=2
-			
+			else:
+				fire[k,l]=1
+				
 		else:
 			fire[k,l]=1
 
+print 'countf'
+print countf
 
 ############FORMATAGE OUTPUT############
 try:

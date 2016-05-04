@@ -111,7 +111,7 @@ for i in range(0,H):
 		img108=array108[i,j]
 		delta= img039-img108
 		if hh >= 8 and hh< 18:
-			if (img039>315 and delta>10 and img108>303):
+			if (img039>315 and delta>20 and img108>283):
 				#source metoffice.gov.uk, cloud detection
 				potfire[i,j]=2
 				#print "x="+str(i)+" et y="+str(j)
