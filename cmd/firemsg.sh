@@ -6,10 +6,10 @@ bash ftp.sh
 cd /home/user/firemsg/Auto/compressed
 
 time_slot=$(ls *EPI*)
-YYYY=${time_slot:47:4}
-MM=${time_slot:51:2}
-DD=${time_slot:53:2}
-HHMM=${time_slot:55:4}
+YYYY=${time_slot:46:4}
+MM=${time_slot:50:2}
+DD=${time_slot:52:2}
+HHMM=${time_slot:54:4}
 export MSG_DATA_PATH=$YYYY/$MM/$DD/$HHMM
 
 for i in /home/user/firemsg/Auto/compressed/L*C_
@@ -25,7 +25,7 @@ for i in /home/user/firemsg/Auto/compressed/L*C_
 	mkdir -p /home/user/firemsg/Auto/decompressed/$YYYY/$MM/$DD/$HHMM
     mv $i /home/user/firemsg/Auto/archive
 done
-	
+
 for j in /home/user/firemsg/Auto/compressed/L*__
 	do
 	cd /home/user/firemsg/Auto/compressed

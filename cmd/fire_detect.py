@@ -112,8 +112,8 @@ for i in range(0,H):
 		img039=array039[i,j]
 		img108=array108[i,j]
 		delta= img039-img108
-		if hh >= 8 and hh< 18:
-			if (img039>315 and delta>10 and img108>283):
+		if hh >= 2 and hh< 18:
+			if (img039>300 and delta>20 and img108>283):
 				#source metoffice.gov.uk, cloud detection
 				potfire[i,j]=2
 				#print "x="+str(i)+" et y="+str(j)
@@ -151,28 +151,25 @@ for k in range (q,H-q) :
 			potf108=array108[k,l]
 			
 			temp039=array039[k-q:(k+q+1),l-q:(l+q+1)]
+			[h,w]=temp039.shape
+			n=h*w
 			meanpotf039=temp039.mean()
-			devpotf039=temp039.std()
+			devpotf039=sum(sum([abs(x-meanpotf039) for x in temp039]))/n
 			
 			temp108=array108[k-q:(k+q+1),l-q:(l+q+1)]
 			meanpotf108=temp108.mean()
-			devpotf108=temp108.std()
+			devpotf108=sum(sum([abs(x-meanpotf108) for x in temp108]))/n
 			
 			deltapotf=potf039-potf108
-			#print 'deltapotf'
-			#print deltapotf
 			tempdeltapotf=array039[k-q:(k+q+1),l-q:(l+q+1)]-array108[k-q:(k+q+1),l-q:(l+q+1)]
 			meandeltapotf=tempdeltapotf.mean()
-			#print 'meandeltapotf'
-			#print meandeltapotf
-			devdeltapotf=tempdeltapotf.std()
-			#print 'devdeltapotf'
-			#print devdeltapotf
-			countf+=1
+			devdeltapotf=sum(sum([abs(x-meandeltapotf) for x in tempdeltapotf]))/n
 			
-			if deltapotf > (meandeltapotf+3.5*devdeltapotf) and deltapotf > (meandeltapotf+6) and potf039 > (meanpotf039+3*devpotf039) and potf108>(meanpotf108+devpotf108-4) :
-				#source Louis Giglio "An enhanced contextual fire detection algorithm for Modis 2003
+			
+			if deltapotf > (meandeltapotf+2*devdeltapotf) and potf039 > (meanpotf039+2*devpotf039):
+				#source Manyangadze "Forest fire detection for near real-time monitoring using geostationary satellites"
 				fire[k,l]=2
+				countf+=1
 			else:
 				fire[k,l]=1
 				

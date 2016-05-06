@@ -10,30 +10,33 @@ quote USER $name
 quote PASS $password
 binary
 cd lrit3h
-mget *20160503*
+mget *20160505*
 quit
 EOF
 
 cd /home/user/firemsg/cmd
 bash appel.sh
 
+script=potfire.sh
+time_slot=2016/05/05
+
 cd /home/user/firemsg/cmd
-export MSG_DATA_PATH=2016/05/03/0245
-bash potfire.sh
-export MSG_DATA_PATH=2016/05/03/0545
-bash potfire.sh
-export MSG_DATA_PATH=2016/05/03/0845
-bash potfire.sh
-export MSG_DATA_PATH=2016/05/03/1145
-bash potfire.sh
-export MSG_DATA_PATH=2016/05/03/1445
-bash potfire.sh
-export MSG_DATA_PATH=2016/05/03/1745
-bash potfire.sh
-export MSG_DATA_PATH=2016/05/03/2045
-bash potfire.sh
-export MSG_DATA_PATH=2016/05/03/2345
-bash potfire.sh
+export MSG_DATA_PATH=$time_slot/0245
+bash $script
+export MSG_DATA_PATH=$time_slot/0545
+bash $script
+export MSG_DATA_PATH=$time_slot/0845
+bash $script
+export MSG_DATA_PATH=$time_slot/1145
+bash $script
+export MSG_DATA_PATH=$time_slot/1445
+bash $script
+export MSG_DATA_PATH=$time_slot/1745
+bash $script
+export MSG_DATA_PATH=$time_slot/2045
+bash $script
+export MSG_DATA_PATH=$time_slot/2345
+bash $script
 
 cd /home/user/firemsg/cmd
 python resume_day.py
