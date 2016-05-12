@@ -11,20 +11,19 @@ for i in /home/user/firemsg/Auto/compressed/L*C_
 	MM=${temp:85:2}
 	DD=${temp:87:2}
     HHMM=${temp:89:4}
-	cd /home/user/firemsg/Auto/decompressed
-	mkdir -p $YYYY/$MM/$DD/$HHMM
+	mkdir -p /home/user/firemsg/Auto/decompressed/$YYYY/$MM/$DD/$HHMM
     mv $i /home/user/firemsg/Auto/archive
 done
-	
+
 for j in /home/user/firemsg/Auto/compressed/L*__
 	do
+	cd /home/user/firemsg/Auto/compressed
 	cp $j /home/user/firemsg/Auto/archive
     tempo=$(echo $j)
-	outYYYY=$(echo ${tempo:81:4})
-	outMM=$(echo ${tempo:85:2})
-	outDD=$(echo ${tempo:87:2})
+	outYYYY=${tempo:81:4}
+	outMM=${tempo:85:2}
+	outDD=${tempo:87:2}
     outHHMM=${tempo:89:4}
 	mv $j /home/user/firemsg/Auto/decompressed/$outYYYY/$outMM/$outDD/$outHHMM
-	export MSG_DATA_PATH=$outYYYY/$outMM/$outDD/$outHHMM
 done
 exit 0

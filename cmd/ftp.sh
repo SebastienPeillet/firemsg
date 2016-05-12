@@ -4,6 +4,7 @@ cd /home/user/firemsg/Auto/compressed
 hostname="oisftp.eumetsat.org"
 name="lrit3h_412"
 password="QSxMzckd"
+
 ftp -i -n $hostname <<EOF
 quote USER $name
 quote PASS $password

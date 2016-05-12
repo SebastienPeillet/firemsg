@@ -113,7 +113,7 @@ for i in range(0,H):
 		img108=array108[i,j]
 		delta= img039-img108
 		if hh >= 2 and hh< 18:
-			if (img039>300 and delta>20 and img108>283):
+			if (img039>300 and delta>10 and img108>290):
 				#source metoffice.gov.uk, cloud detection
 				potfire[i,j]=2
 				#print "x="+str(i)+" et y="+str(j)
@@ -121,7 +121,7 @@ for i in range(0,H):
 			else:
 				potfire[i,j]=1
 		else :
-			if img039>305 and delta>3 :
+			if img039>300 and delta>3 :
 				potfire[i,j]=2
 				countpotf+=1
 			else:
@@ -134,7 +134,7 @@ print countpotf
 fire=sp.empty((H,W),dtype='int32')
 
 #window width
-p=3
+p=5
 q=(p-1)/2
 
 fire[:q,:]=0
@@ -166,7 +166,7 @@ for k in range (q,H-q) :
 			devdeltapotf=sum(sum([abs(x-meandeltapotf) for x in tempdeltapotf]))/n
 			
 			
-			if deltapotf > (meandeltapotf+2*devdeltapotf) and potf039 > (meanpotf039+2*devpotf039):
+			if deltapotf > (meandeltapotf+3.0*devdeltapotf) and potf039 > (meanpotf039+3.0*devpotf039):
 				#source Manyangadze "Forest fire detection for near real-time monitoring using geostationary satellites"
 				fire[k,l]=2
 				countf+=1

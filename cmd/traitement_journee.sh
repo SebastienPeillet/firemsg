@@ -1,24 +1,23 @@
 #!usr/bin/sh
 
-cd /..
-cd /home/user/firemsg/Auto/compressed
-hostname="oisftp.eumetsat.org"
-name="lrit3h_412"
-password="QSxMzckd"
-ftp -i -n $hostname <<EOF
-quote USER $name
-quote PASS $password
-binary
-cd lrit3h
-mget *20160505*
-quit
-EOF
+#cd /home/user/firemsg/Auto/compressed
+#hostname="oisftp.eumetsat.org"
+#name="lrit3h_412"
+#password="QSxMzckd"
+#ftp -i -n $hostname <<EOF
+#quote USER $name
+#quote PASS $password
+#binary
+#cd lrit3h
+#mget *20160511*
+#quit
+#EOF
 
 cd /home/user/firemsg/cmd
 bash appel.sh
 
 script=potfire.sh
-time_slot=2016/05/05
+time_slot=2016/05/11
 
 cd /home/user/firemsg/cmd
 export MSG_DATA_PATH=$time_slot/0245

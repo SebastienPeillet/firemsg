@@ -66,35 +66,38 @@ except:
 
 ############FORMATAGE OUTPUT############
 try:
-	outpath='/home/user/firemsg/Auto/img_RA/'+time_path+'/'
-	file_name16b=outpath+'LRIT-MSG3-RA-%s%s%s-%s' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
+	outpathRA='/home/user/firemsg/Auto/img_RA/'+time_path+'/'
+	outpathBT='/home/user/firemsg/Auto/img_BT/'+time_path+'/'
+	file_nameRA=outpathRA+'LRIT-MSG3-RA-%s%s%s-%s' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
+	file_nameBT=outpathBT+'LRIT-MSG3-BT-%s%s%s-%s' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
 	print "\nFORMATAGE SORTIE : OK\n"
 except:
 	print"\nFormatage fichiers sortie echoue"
 
 try :
-    os.makedirs(outpath)
+	os.makedirs(outpathRA)
+	os.makedirs(outpathBT)
 except:
     print 'out path already exists'
 
-
 ############SAUVEGARDE DES FICHIERS IMAGES RA############
 try:
-	# img=data.image.channel_image(0.6)
-	# img.save("/home/USER/Auto/img_brute/test0.png")
-	# img=data.image.channel_image(1.6)
-	# img.save("/home/USER/Auto/img_brute/test1.png")
+	driver=gdal.GetDriverByName("GTiff")
+	
 	img039=data.image.channel_image(3.9)
-	file_name16b039=file_name16b+'-039.tiff'
-	img039.save(file_name16b039,tags={"NBITS":'16'}, floating_point=True)
-	# img=data.image.channel_image(6.2)
-	# img.save("/home/USER/Auto/img_brute/test3.png")
+	file_nameRA039=file_nameRA+'-039.tiff'
+	img039.save(file_nameRA039,tags={"NBITS":'16'}, floating_point=True)
+	file_nameBT039=file_nameBT+'-039.tiff'
+	driver.CreateCopy(file_nameBT039,gdal_array.OpenArray(data[3.9].data,None))
+	
 	img108=data.image.channel_image(10.8)
-	file_name16b108=file_name16b+'-108.tiff'
-	img108.save(file_name16b108, tags={"NBITS":'16'},floating_point=True)
-	print "\nSAUVEGARDE FICHIER IMAGE : OK\n"
+	file_nameRA108=file_nameRA+'-108.tiff'
+	img108.save(file_nameRA108, tags={"NBITS":'16'},floating_point=True)
+	file_nameBT108=file_nameBT+'-108.tiff'
+	driver.CreateCopy(file_nameBT108,gdal_array.OpenArray(data[10.8].data,None))
+	print "\nSAUVEGARDE FICHIER RADIANCE : OK\n"
 except:
-	print"\nSauvegarde fichiers sortie echoue"
+	print"\nSauvegarde fichiers radiance echoue"
 	
 	
 ###############POT FIRE##################
@@ -111,14 +114,14 @@ for i in range(0,H):
 		img108=array108[i,j]
 		delta= img039-img108
 		if hh >= 8 and hh< 18:
-			if (img039>315 and delta>20 and img108>283):
+			if (img039>300 and delta>10 and img108>290):
 				#source metoffice.gov.uk, cloud detection
 				potfire[i,j]=2
 				#print "x="+str(i)+" et y="+str(j)
 			else:
 				potfire[i,j]=1
 		else :
-			if img039>305 and delta>3 :
+			if img039>300 and delta>3 :
 				potfire[i,j]=2
 			else:
 				potfire[i,j]=1
@@ -139,9 +142,11 @@ try :
 except:
     print 'out path already exists'
 ############SAUVEGARDE DES FICHIERS IMAGES############
-driver=gdal.GetDriverByName("GTiff")
-driver.CreateCopy(outname,gdal_array.OpenArray(potfire,None))
-
-
+try:
+	driver=gdal.GetDriverByName("GTiff")
+	driver.CreateCopy(outname,gdal_array.OpenArray(potfire,None))
+	print "\nSAUVEGARDE FICHIER PF : OK\n"
+except:
+	print "\nSauvegarde fichier pf echoue"
 
 quit()
