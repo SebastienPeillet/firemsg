@@ -1,10 +1,24 @@
 #!/usr/bin/sh
-cd /..
+###################################################################################
+# ftp.sh script
+# 
+# Author : Sebastien Peillet
+# Project : TAIMPO, UMR Espace Dev
+#
+# Description : 
+# This script is a part of the fire detection processing with MSG data. It could be 
+# used with the firemsg.sh script or independantly.
+# The script will download the last available data on the Eumetsat FTP.
+###################################################################################
+
 cd /home/user/firemsg/Auto/compressed
+
+#Connexion variables
 hostname="oisftp.eumetsat.org"
 name="lrit3h_412"
 password="QSxMzckd"
 
+#First FTP connexion to get files list
 ftp -i -n $hostname <<EOF
 quote USER $name
 quote PASS $password
@@ -13,6 +27,7 @@ mls L* list.txt
 quit
 EOF
 
+#Loop to determine the last available data
 a=$(wc -l list.txt)
 a=${a:0:3}
 time_slot=0
@@ -26,6 +41,7 @@ for i in $(seq 1 $a)
 done
 echo $time_slot
 
+#Second connexion to download the files that go with times_slot
 ftp -i -n $hostname <<EOF
 quote USER $name
 quote PASS $password
@@ -34,3 +50,5 @@ cd lrit3h
 mget *$time_slot*
 quit
 EOF
+
+exit 0
