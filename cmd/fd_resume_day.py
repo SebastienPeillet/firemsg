@@ -23,9 +23,14 @@ import scipy as sp
 ############ VARIABLES #################
 #Sub section for variable initialization
 
+#Firemsg_path variable
+FIREMSG_PATH=os.environ["FIREMSG_PATH"]
+
 #Projection variable
 proj='PROJCS["geos0",GEOGCS["GCS_unnamed ellipse",DATUM["D_unknown",SPHEROID["Unknown",6378169,295.4880658970008]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]],PROJECTION["Geostationary_Satellite"],PARAMETER["central_meridian",0],PARAMETER["satellite_height",35785831],PARAMETER["false_easting",0],PARAMETER["false_northing",0],UNIT["Meter",1]]'
 scr=(-1815176.8232086236, 3001.127145141965, 0.0, 1767937.3415769583, 0.0, -3000.110727186341)
+
+#Time variable
 try:
     time_path=os.environ["MSG_DATA_PATH"]
     time_tab=time_path.split('/')
@@ -40,7 +45,12 @@ except :
 #Sub section for data load
 
 #Path to data
-inpath='/home/user/firemsg/Auto/img_TF/'+time_tab[0]+'/'+time_tab[1]+'/'+time_tab[2]+'/'
+inpath=FIREMSG_PATH+'/Auto/img_TF/'+time_tab[0]+'/'+time_tab[1]+'/'+time_tab[2]+'/'
+#Time
+time_slot=['0245','0545','0845','1145','1445','1745','2045','2345']
+
+for t in time_slot :
+	
 #Name files
 infile_name0245=inpath+'0245/LRIT-MSG3-TF-%s%s%s-0245.tiff' % (time_tab[0], time_tab[1], time_tab[2])
 infile_name0545=inpath+'0545/LRIT-MSG3-TF-%s%s%s-0545.tiff' % (time_tab[0], time_tab[1], time_tab[2])
@@ -117,7 +127,7 @@ for i in range (0,H) :
 #Sub section to resume file configuration
 
 try:
-	outpath='/home/user/firemsg/Auto/img_TF/'+time_tab[0]+'/'+time_tab[1]+'/'+time_tab[2]+'/'
+	outpath=FIREMSG_PATH+'/Auto/img_TF/'+time_tab[0]+'/'+time_tab[1]+'/'+time_tab[2]+'/'
 	outname=outpath+'LRIT-MSG3-TF-%s%s%s-resume.tiff' % (time_tab[0], time_tab[1], time_tab[2])
 	print "\nFORMATAGE SORTIE : OK\n"
 except:

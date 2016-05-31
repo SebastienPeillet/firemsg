@@ -39,6 +39,9 @@ import datetime
 ############ VARIABLES #################
 #Sub section for variable initialization
 
+#Firemsg_path variable
+FIREMSG_PATH=os.environ["FIREMSG_PATH"]
+
 #Projection variable
 proj='PROJCS["geos0",GEOGCS["GCS_unnamed ellipse",DATUM["D_unknown",SPHEROID["Unknown",6378169,295.4880658970008]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]],PROJECTION["Geostationary_Satellite"],PARAMETER["central_meridian",0],PARAMETER["satellite_height",35785831],PARAMETER["false_easting",0],PARAMETER["false_northing",0],UNIT["Meter",1]]'
 scr=(-1815176.8232086236, 3001.127145141965, 0.0, 1767937.3415769583, 0.0, -3000.110727186341)
@@ -56,6 +59,16 @@ try:
 except :
 	print "\nMSG_DATA_PATH UNDEFINED, YOU MUST USE BASH SCRIPT WITH 'export MSG_DATA_PATH=path/to/data'"
 
+#Threshold args
+T039=int(os.environ["T039"])
+T108=int(os.environ["T108"])
+delta_day=int(os.environ["delta_day"])
+delta_night=int(os.environ["delta_night"])
+day_start=int(os.environ["day_start"])
+day_end=int(os.environ["day_end"])
+window_width=int(os.environ["window_width"])
+potfire_nb_limit=int(os.environ["potfire_nb_limit"])
+level_requirement=float(os.environ["level_requirement"])
 
 ############ DATA LOAD WITH PYTROLL############
 #Sub section for data load with pytroll
@@ -96,7 +109,7 @@ except:
 #Sub section for BT files configuration
 
 try:
-	outpathBT='/home/user/firemsg/Auto/img_BT/'+time_path+'/'
+	outpathBT=FIREMSG_PATH+'/Auto/img_BT/'+time_path+'/'
 	file_nameBT=outpathBT+'LRIT-MSG3-BT-%s%s%s-%s' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
 	print "\nOUTPUT FORMATTING : OK\n"
 except:
@@ -160,15 +173,15 @@ for i in range(0,H):
 		
 		#Threshold to detect potentiel fire pixel, formula depends on time, indices can be change
 		#Day time
-		if hh >= 8 and hh< 18:
-			if (img039>300 and delta>15 and img108>290):
+		if hh >= day_start and hh< day_end:
+			if (img039>T039 and delta>delta_day and img108>T108):
 				potfire[i,j]=2
 				countpotf+=1
 			else:
 				potfire[i,j]=1
 		#Night time
 		else :
-			if img039>300 and delta>5 :
+			if img039>T039 and delta>delta_night :
 				potfire[i,j]=2
 				countpotf+=1
 			else:
@@ -181,7 +194,7 @@ print countpotf
 #Sub section to PF files configuration. Can be comment to skip PF save, no influence on the TF file
 
 try:
-	outpath='/home/user/firemsg/Auto/img_PF/'+time_path+'/'
+	outpath=FIREMSG_PATH+'/Auto/img_PF/'+time_path+'/'
 	outname=outpath+'LRIT-MSG3-PF-%s%s%s-%s.tiff' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
 	print "\nOUTPUT FORMATTING : OK\n"
 except:
@@ -216,7 +229,7 @@ except:
 fire=sp.empty((H,W),dtype='int32')
 
 #Window width
-p=5
+p=window_width
 q=(p-1)/2
 
 #Border processing
@@ -261,11 +274,11 @@ for k in range (q,H-q) :
 			meandeltapotf=tempdeltapotf.mean()
 			devdeltapotf=sum(sum([abs(x-meandeltapotf) for x in tempdeltapotf]))/n
 			
-			if potfirecount > 30 :
+			if potfirecount > potfire_nb_limit :
 				fire[k,l]=0
 			
 			else :
-				if deltapotf > (meandeltapotf+3.5*devdeltapotf) and potf039 > (meanpotf039+3.5*devpotf039):
+				if deltapotf > (meandeltapotf+level_requirement*devdeltapotf) and potf039 > (meanpotf039+level_requirement*devpotf039):
 					#source Manyangadze "Forest fire detection for near real-time monitoring using geostationary satellites"
 					fire[k,l]=array039[k,l]
 					countf+=1
@@ -281,7 +294,7 @@ print countf
 #Sub section to TF files configuration.
 
 try:
-	outpath='/home/user/firemsg/Auto/img_TF/'+time_path+'/'
+	outpath=FIREMSG_PATH+'/Auto/img_TF/'+time_path+'/'
 	outname=outpath+'LRIT-MSG3-TF-%s%s%s-%s.tiff' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
 	print "\nOUTPUT FORMATTING : OK\n"
 except:

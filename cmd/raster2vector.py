@@ -22,6 +22,13 @@ from osgeo import osr
 from osgeo import gdal_array
 from osgeo import gdalconst
 
+############ VARIABLES #################
+#Sub section for variable initialization
+
+#Firemsg_path variable
+FIREMSG_PATH=os.environ["FIREMSG_PATH"]
+
+#Time variable
 time_path=os.environ["MSG_DATA_PATH"]
 time_tab=time_path.split('/')
 YYYY=int(time_tab[0])
@@ -35,7 +42,7 @@ mm=int((time_tab[3])[2:4])
 # Sub section for polygonize TF
 
 # In data info
-inDataFilePath='/home/user/firemsg/Auto/img_TF/'+time_tab[0]+'/'+time_tab[1]+'/'+time_tab[2]+'/'+time_tab[3]+'/'
+inDataFilePath=FIREMSG_PATH+'/Auto/img_TF/'+time_tab[0]+'/'+time_tab[1]+'/'+time_tab[2]+'/'+time_tab[3]+'/'
 inDataFileName='LRIT-MSG3-TF-%s%s%s-%s' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
 inDataFile=inDataFilePath+inDataFileName+'.tiff'
 
@@ -45,7 +52,7 @@ layerTF=imgTF.GetRasterBand(1)
 
 # Temp data info
 tempDriver=ogr.GetDriverByName("ESRI Shapefile")
-tempDataFilePath='/home/user/firemsg/Auto/vec_TF/'+time_tab[0]+'/'+time_tab[1]+'/'+time_tab[2]+'/'+time_tab[3]+'/'
+tempDataFilePath=FIREMSG_PATH+'/Auto/vec_TF/'+time_tab[0]+'/'+time_tab[1]+'/'+time_tab[2]+'/'+time_tab[3]+'/'
 try :
     os.makedirs(tempDataFilePath)
 except:

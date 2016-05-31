@@ -10,12 +10,15 @@
 # used with the firemsg.sh script or independantly.
 # The script will decompress all LRIT data in the compressed folder.
 ###################################################################################
-cd /home/user/firemsg/Auto/compressed
+
+source config_firemsg.cfg
+
+cd $FIREMSG_PATH/Auto/compressed
 
 #Loop to decompress LRIT data and create decompressed path, save the compressed file into archive folder
-for i in /home/user/firemsg/Auto/compressed/L*C_
+for i in $FIREMSG_PATH/Auto/compressed/L*C_
 	do
-    cd /home/user/firemsg/Auto/compressed
+    cd $FIREMSG_PATH/Auto/compressed
 	temp=$(echo $i)
 	echo "Conversion de : $i"
 	xRITDecompress $i
@@ -28,16 +31,16 @@ for i in /home/user/firemsg/Auto/compressed/L*C_
 done
 
 #Loop to move LRIT uncompressed data to decompressed path
-for j in /home/user/firemsg/Auto/compressed/L*__
+for j in $FIREMSG_PATH/Auto/compressed/L*__
 	do
-	cd /home/user/firemsg/Auto/compressed
-	cp $j /home/user/firemsg/Auto/archive
+	cd $FIREMSG_PATH/Auto/compressed
+	cp $j $FIREMSG_PATH/Auto/archive
     tempo=$(echo $j)
 	outYYYY=${tempo:81:4}
 	outMM=${tempo:85:2}
 	outDD=${tempo:87:2}
     outHHMM=${tempo:89:4}
-	mv $j /home/user/firemsg/Auto/decompressed/$outYYYY/$outMM/$outDD/$outHHMM
+	mv $j $FIREMSG_PATH/Auto/decompressed/$outYYYY/$outMM/$outDD/$outHHMM
 done
 
 exit 0

@@ -13,10 +13,25 @@
 #
 # Thanks to Pytroll team and to OSGEO tools
 ###################################################################################
+source config_firemsg.cfg
+
+#Main_config
+export FIREMSG_PATH
+#Threshold args
+export T039
+export T108
+export delta_day
+export delta_night
+export day_start
+export day_end
+export window_width
+export potfire_nb_limit
+export level_requirement
+
 
 export PPP_CONFIG_DIR=/home/user/.local/lib/python2.7/site-packages/mpop
 export XRIT_DECOMPRESS_PATH=/bin
-export XRIT_DECOMPRESS_OUTDIR=/home/user/firemsg/Auto/decompressed/etc
+export XRIT_DECOMPRESS_OUTDIR=$FIREMSG_PATH/Auto/decompressed/etc
 python fire_detect.py
 
 exit 0

@@ -13,16 +13,19 @@
 
 #PATH environment variable, needed for cronjob
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+source /home/user/firemsg/cmd/config_firemsg.cfg
 
+export FIREMSG_PATH
+export ENABLE_POSTGRES
 
 #ftp.sh script downloads the last available data
-cd /home/user/firemsg/cmd
+cd $FIREMSG_PATH/cmd
 bash ftp.sh
 
 
 #MSG_DATA_PATH environment variable, needed to access and create all path during processing
-cd /home/user/firemsg/Auto/compressed
-#based on EPI file
+cd $FIREMSG_PATH/Auto/compressed
+based on EPI file
 time_slot=$(ls *EPI*)
 YYYY=${time_slot:46:4}
 MM=${time_slot:50:2}
@@ -32,7 +35,7 @@ export MSG_DATA_PATH=$YYYY/$MM/$DD/$HHMM
 
 
 #decompress.sh script decompresses LRIT data
-cd /home/user/firemsg/cmd
+cd $FIREMSG_PATH/cmd
 bash decompress.sh
 
 
@@ -42,6 +45,9 @@ bash fire_detect.sh
 #convert fire from raster to vector
 bash raster2vector.sh
 
-#missing : vectorize step , transfer to database step
+if [ $ENABLE_POSTGRES=true ]
+then bash add2pg.sh
+fi
+
 
 exit 0

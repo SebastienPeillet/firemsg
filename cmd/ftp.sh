@@ -10,8 +10,9 @@
 # used with the firemsg.sh script or independantly.
 # The script will download the last available data on the Eumetsat FTP.
 ###################################################################################
+source config_firemsg.cfg
 
-cd /home/user/firemsg/Auto/compressed
+cd $FIREMSG_PATH/Auto/compressed
 
 #Connexion variables
 hostname="oisftp.eumetsat.org"

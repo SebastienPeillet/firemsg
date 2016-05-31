@@ -15,7 +15,13 @@ import os
 import ogr
 import psycopg2
 
-#Variable
+############ VARIABLES #################
+#Sub section for variable initialization
+
+#Firemsg_path variable
+FIREMSG_PATH=os.environ["FIREMSG_PATH"]
+
+#Time variable
 time_path=os.environ["MSG_DATA_PATH"]
 time_tab=time_path.split('/')
 YYYY=int(time_tab[0])
@@ -24,7 +30,9 @@ DD=int(time_tab[2])
 hh=int((time_tab[3])[0:2])
 mm=int((time_tab[3])[2:4])
 
-inDataFilePath='/home/user/firemsg/Auto/vec_TF/'+time_tab[0]+'/'+time_tab[1]+'/'+time_tab[2]+'/'+time_tab[3]+'/'
+
+
+inDataFilePath=FIREMSG_PATH+'/Auto/vec_TF/'+time_tab[0]+'/'+time_tab[1]+'/'+time_tab[2]+'/'+time_tab[3]+'/'
 inDataFileName='LRIT-MSG3-vecTF-%s%s%s-%s-WGS84' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
 inDataFile=inDataFilePath+inDataFileName+'.shp'
 
@@ -42,5 +50,5 @@ for feature in layer :
 	time=feature.GetField("Time")
 	temp=feature.GetField("Count")
 	geom=str(feature.GetGeometryRef())
-	cursor.execute("""INSERT INTO fire(date,time,temp_kelvin,geom) VALUES (%s,%s,%s,ST_GeomFromText(%s,4326));""",(date, time, temp, geom))
+	cursor.execute("""INSERT INTO fire5(date,time,temp_kelvin,geom) VALUES (%s,%s,%s,ST_GeomFromText(%s,4326));""",(date, time, temp, geom))
 connection.commit()
