@@ -13,20 +13,18 @@ source /home/user/firemsg/cmd/config_firemsg.cfg
 export FIREMSG_PATH
 export ENABLE_POSTGRES
 #FTP download, change the mget argument (YYYYMMDD) to select the day you want
-cd $FIREMSG_PATH/Auto/compressed
-hostname="oisftp.eumetsat.org"
-name="lrit3h_412"
-password="QSxMzckd"
-ftp -i -n $hostname <<EOF
-quote USER $name
-quote PASS $password
-binary
-cd lrit3h
-mget *20160528*
-mget *20160529*
-mget *20160530*
-quit
-EOF
+#cd $FIREMSG_PATH/Auto/compressed
+#hostname="oisftp.eumetsat.org"
+#name="lrit3h_412"
+#password="QSxMzckd"
+#ftp -i -n $hostname <<EOF
+#quote USER $name
+#quote PASS $password
+#binary
+#cd lrit3h
+#mget *20160603*
+#quit
+#EOF
 
 #Decompress all LRIT files
 cd $FIREMSG_PATH/cmd
@@ -37,8 +35,8 @@ script2=raster2vector.sh
 script3=add2pg.py
 
 #Day variable to process
-dateDeb=2016-05-28
-dateFin=2016-05-31
+dateDeb=2016-06-01
+dateFin=2016-06-04
 
 while [ "$dateDeb" != "$dateFin" ]; do
 	date_slot=$(date --date=$dateDeb +'%Y/%m/%d')
@@ -50,7 +48,7 @@ while [ "$dateDeb" != "$dateFin" ]; do
 		export MSG_DATA_PATH=$date_slot/$time_slot
 		bash $script1
 		bash $script2
-		#python $script3
+		python $script3
 	
 	done
 	

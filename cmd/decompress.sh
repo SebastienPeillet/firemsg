@@ -19,15 +19,15 @@ cd $FIREMSG_PATH/Auto/compressed
 for i in $FIREMSG_PATH/Auto/compressed/L*C_
 	do
     cd $FIREMSG_PATH/Auto/compressed
-	temp=$(echo $i)
+	temp=$(basename $i)
 	echo "Conversion de : $i"
 	xRITDecompress $i
-	YYYY=${temp:81:4}
-	MM=${temp:85:2}
-	DD=${temp:87:2}
-    HHMM=${temp:89:4}
-	mkdir -p /home/user/firemsg/Auto/decompressed/$YYYY/$MM/$DD/$HHMM
-    mv $i /home/user/firemsg/Auto/archive
+	YYYY=${temp:46:4}
+	MM=${temp:50:2}
+	DD=${temp:52:2}
+    HHMM=${temp:54:4}
+	mkdir -p $FIREMSG_PATH/Auto/decompressed/$YYYY/$MM/$DD/$HHMM
+    mv $i $FIREMSG_PATH/Auto/archive
 done
 
 #Loop to move LRIT uncompressed data to decompressed path
@@ -35,11 +35,11 @@ for j in $FIREMSG_PATH/Auto/compressed/L*__
 	do
 	cd $FIREMSG_PATH/Auto/compressed
 	cp $j $FIREMSG_PATH/Auto/archive
-    tempo=$(echo $j)
-	outYYYY=${tempo:81:4}
-	outMM=${tempo:85:2}
-	outDD=${tempo:87:2}
-    outHHMM=${tempo:89:4}
+    temp=$(basename $j)
+	outYYYY=${temp:46:4}
+	outMM=${temp:50:2}
+	outDD=${temp:52:2}
+    outHHMM=${temp:54:4}
 	mv $j $FIREMSG_PATH/Auto/decompressed/$outYYYY/$outMM/$outDD/$outHHMM
 done
 

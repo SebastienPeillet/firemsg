@@ -45,7 +45,7 @@ bash fire_detect.sh
 #convert fire from raster to vector
 bash raster2vector.sh
 
-if [ $ENABLE_POSTGRES=true ]
+if [ $ENABLE_POSTGRES = true ]
 then bash add2pg.sh
 fi
 

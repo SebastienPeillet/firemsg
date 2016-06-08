@@ -46,10 +46,6 @@ except :
 
 #Path to data
 inpath=FIREMSG_PATH+'/Auto/img_TF/'+time_tab[0]+'/'+time_tab[1]+'/'+time_tab[2]+'/'
-#Time
-time_slot=['0245','0545','0845','1145','1445','1745','2045','2345']
-
-for t in time_slot :
 	
 #Name files
 infile_name0245=inpath+'0245/LRIT-MSG3-TF-%s%s%s-0245.tiff' % (time_tab[0], time_tab[1], time_tab[2])

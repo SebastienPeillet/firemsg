@@ -50,5 +50,5 @@ for feature in layer :
 	time=feature.GetField("Time")
 	temp=feature.GetField("Count")
 	geom=str(feature.GetGeometryRef())
-	cursor.execute("""INSERT INTO fire5(date,time,temp_kelvin,geom) VALUES (%s,%s,%s,ST_GeomFromText(%s,4326));""",(date, time, temp, geom))
+	cursor.execute("""INSERT INTO fire(date,time,temp_kelvin,geom) VALUES (%s,%s,%s,ST_GeomFromText(%s,4326));""",(date, time, temp, geom))
 connection.commit()
