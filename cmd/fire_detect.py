@@ -60,6 +60,7 @@ except :
 	print "\nMSG_DATA_PATH UNDEFINED, YOU MUST USE BASH SCRIPT WITH 'export MSG_DATA_PATH=path/to/data'"
 
 #Threshold args
+ENABLE_FIRE_DETECTION=os.environ["ENABLE_FIRE_DETECTION"]
 T039=int(os.environ["T039"])
 T108=int(os.environ["T108"])
 delta_day=int(os.environ["delta_day"])
@@ -150,176 +151,177 @@ except:
 	
 	
 ###############POT FIRE##################
-#Sub section to detect potentiel fire
+if ENABLE_FIRE_DETECTION=='true' :
+	#Sub section to detect potentiel fire
 
-#Load channel array
-array039=global_data[3.9].data
-array108=global_data[10.8].data
+	#Load channel array
+	array039=global_data[3.9].data
+	array108=global_data[10.8].data
 
-#Initialize potential fire array
-[H,W]=array039.shape
-dtype=array039.dtype
-potfire=sp.empty((H,W),dtype='int32')
+	#Initialize potential fire array
+	[H,W]=array039.shape
+	dtype=array039.dtype
+	potfire=sp.empty((H,W),dtype='int32')
 
-#Potential fire counter initialize
-countpotf=0
+	#Potential fire counter initialize
+	countpotf=0
 
-#Loop to detect potential fire pixel
-for i in range(0,H):
-	for j in range(0,W):
-		img039=array039[i,j]
-		img108=array108[i,j]
-		delta= img039-img108
-		
-		#Threshold to detect potentiel fire pixel, formula depends on time, indices can be change
-		#Day time
-		if hh >= day_start and hh< day_end:
-			if (img039>T039 and delta>delta_day and img108>T108):
-				potfire[i,j]=2
-				countpotf+=1
-			else:
-				potfire[i,j]=1
-		#Night time
-		else :
-			if img039>T039 and delta>delta_night :
-				potfire[i,j]=2
-				countpotf+=1
-			else:
-				potfire[i,j]=1
-
-print countpotf
-
-
-############ PF OUTPUT FORMATTING ############
-#Sub section to PF files configuration. Can be comment to skip PF save, no influence on the TF file
-
-try:
-	outpath=FIREMSG_PATH+'/Auto/img_PF/'+time_path+'/'
-	outname=outpath+'LRIT-MSG3-PF-%s%s%s-%s.tiff' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
-	print "\nOUTPUT FORMATTING : OK\n"
-except:
-	print"\nOUTPUT FORMATTING : FAILED\n"
-
-#Create path if it doesn't exist
-try :
-    os.makedirs(outpath)
-except:
-    print "OUTPATH EXISTS"
-	
-############ SAVE PF FILE ############
-#Sub section to save PF files. Can be comment to skip PF save, no influence on the TF file
-
-try:
-	driver=gdal.GetDriverByName("GTiff")
-	
-	driver.CreateCopy(outname,gdal_array.OpenArray(potfire,None))
-	#Open new 3.9um tiff
-	imgPF=gdal.Open(outname,1)
-	#Tiff projection
-	imgPF.SetGeoTransform(scr)
-	imgPF.SetProjection(proj)
-	print "\nSAVE POTENTIAL FIRE FILE : OK\n"
-except:
-	print "\nSAVE POTENTIAL FIRE FILE : FAILED\n"
-
-##########CONTEXTUAL THRESHOLD##########
-#Sub section to validate true fire from potential fire
-
-#True fire array initialize
-fire=sp.empty((H,W),dtype='int32')
-
-#Window width
-p=window_width
-q=(p-1)/2
-
-#Border processing
-fire[:q,:]=0
-fire[:,:q]=0
-fire[:-q,:]=0
-fire[:,:-q]=0
-
-#True fire counter initialize
-countf=0
-
-#Loop to detect true fire
-for k in range (q,H-q) :
-	for l in range (q,W-q) :
-		if potfire[k,l]==2 :
+	#Loop to detect potential fire pixel
+	for i in range(0,H):
+		for j in range(0,W):
+			img039=array039[i,j]
+			img108=array108[i,j]
+			delta= img039-img108
 			
-			#Pixel value in [k,l]
-			potf039=array039[k,l]
-			potf108=array108[k,l]
-			
-			potfirecount=sum(sum(potfire[k-q:(k+q+1),l-q:(l+q+1)]))
-			
-			#Pixel values in the windows for 3.9um
-			temp039=array039[k-q:(k+q+1),l-q:(l+q+1)]
-			[h,w]=temp039.shape
-			n=h*w
-			#Mean and mean absolute deviation pixel of the window for 3.9um channel
-			meanpotf039=temp039.mean()
-			devpotf039=sum(sum([abs(x-meanpotf039) for x in temp039]))/n
-			
-			#Pixel values in the windows for 10.8um
-			temp108=array108[k-q:(k+q+1),l-q:(l+q+1)]
-			#Mean and mean absolute deviation pixel of the window for 10.8um channel
-			meanpotf108=temp108.mean()
-			devpotf108=sum(sum([abs(x-meanpotf108) for x in temp108]))/n
-			
-			#Delta in [k,l]
-			deltapotf=potf039-potf108
-			#Delta pixel values in the windows
-			tempdeltapotf=array039[k-q:(k+q+1),l-q:(l+q+1)]-array108[k-q:(k+q+1),l-q:(l+q+1)]
-			#Delta mean and mean absolute deviation pixel of the window
-			meandeltapotf=tempdeltapotf.mean()
-			devdeltapotf=sum(sum([abs(x-meandeltapotf) for x in tempdeltapotf]))/n
-			
-			if potfirecount > potfire_nb_limit :
-				fire[k,l]=0
-			
-			else :
-				if deltapotf > (meandeltapotf+level_requirement*devdeltapotf) and potf039 > (meanpotf039+level_requirement*devpotf039):
-					#source Manyangadze "Forest fire detection for near real-time monitoring using geostationary satellites"
-					fire[k,l]=array039[k,l]
-					countf+=1
+			#Threshold to detect potentiel fire pixel, formula depends on time, indices can be change
+			#Day time
+			if hh >= day_start and hh< day_end:
+				if (img039>T039 and delta>delta_day and img108>T108):
+					potfire[i,j]=2
+					countpotf+=1
 				else:
+					potfire[i,j]=1
+			#Night time
+			else :
+				if img039>T039 and delta>delta_night :
+					potfire[i,j]=2
+					countpotf+=1
+				else:
+					potfire[i,j]=1
+
+	print countpotf
+
+
+	############ PF OUTPUT FORMATTING ############
+	#Sub section to PF files configuration. Can be comment to skip PF save, no influence on the TF file
+
+	try:
+		outpath=FIREMSG_PATH+'/Auto/img_PF/'+time_path+'/'
+		outname=outpath+'LRIT-MSG3-PF-%s%s%s-%s.tiff' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
+		print "\nOUTPUT FORMATTING : OK\n"
+	except:
+		print"\nOUTPUT FORMATTING : FAILED\n"
+
+	#Create path if it doesn't exist
+	try :
+	    os.makedirs(outpath)
+	except:
+	    print "OUTPATH EXISTS"
+		
+	############ SAVE PF FILE ############
+	#Sub section to save PF files. Can be comment to skip PF save, no influence on the TF file
+
+	try:
+		driver=gdal.GetDriverByName("GTiff")
+		
+		driver.CreateCopy(outname,gdal_array.OpenArray(potfire,None))
+		#Open new 3.9um tiff
+		imgPF=gdal.Open(outname,1)
+		#Tiff projection
+		imgPF.SetGeoTransform(scr)
+		imgPF.SetProjection(proj)
+		print "\nSAVE POTENTIAL FIRE FILE : OK\n"
+	except:
+		print "\nSAVE POTENTIAL FIRE FILE : FAILED\n"
+
+	##########CONTEXTUAL THRESHOLD##########
+	#Sub section to validate true fire from potential fire
+
+	#True fire array initialize
+	fire=sp.empty((H,W),dtype='int32')
+
+	#Window width
+	p=window_width
+	q=(p-1)/2
+
+	#Border processing
+	fire[:q,:]=0
+	fire[:,:q]=0
+	fire[:-q,:]=0
+	fire[:,:-q]=0
+
+	#True fire counter initialize
+	countf=0
+
+	#Loop to detect true fire
+	for k in range (q,H-q) :
+		for l in range (q,W-q) :
+			if potfire[k,l]==2 :
+				
+				#Pixel value in [k,l]
+				potf039=array039[k,l]
+				potf108=array108[k,l]
+				
+				potfirecount=sum(sum(potfire[k-q:(k+q+1),l-q:(l+q+1)]))
+				
+				#Pixel values in the windows for 3.9um
+				temp039=array039[k-q:(k+q+1),l-q:(l+q+1)]
+				[h,w]=temp039.shape
+				n=h*w
+				#Mean and mean absolute deviation pixel of the window for 3.9um channel
+				meanpotf039=temp039.mean()
+				devpotf039=sum(sum([abs(x-meanpotf039) for x in temp039]))/n
+				
+				#Pixel values in the windows for 10.8um
+				temp108=array108[k-q:(k+q+1),l-q:(l+q+1)]
+				#Mean and mean absolute deviation pixel of the window for 10.8um channel
+				meanpotf108=temp108.mean()
+				devpotf108=sum(sum([abs(x-meanpotf108) for x in temp108]))/n
+				
+				#Delta in [k,l]
+				deltapotf=potf039-potf108
+				#Delta pixel values in the windows
+				tempdeltapotf=array039[k-q:(k+q+1),l-q:(l+q+1)]-array108[k-q:(k+q+1),l-q:(l+q+1)]
+				#Delta mean and mean absolute deviation pixel of the window
+				meandeltapotf=tempdeltapotf.mean()
+				devdeltapotf=sum(sum([abs(x-meandeltapotf) for x in tempdeltapotf]))/n
+				
+				if potfirecount > potfire_nb_limit :
 					fire[k,l]=0
 				
-		else:
-			fire[k,l]=0
+				else :
+					if deltapotf > (meandeltapotf+level_requirement*devdeltapotf) and potf039 > (meanpotf039+level_requirement*devpotf039):
+						#source Manyangadze "Forest fire detection for near real-time monitoring using geostationary satellites"
+						fire[k,l]=array039[k,l]
+						countf+=1
+					else:
+						fire[k,l]=0
+					
+			else:
+				fire[k,l]=0
 
-print countf
+	print countf
 
-############TF OUTPUT FORMATTING############
-#Sub section to TF files configuration.
+	############TF OUTPUT FORMATTING############
+	#Sub section to TF files configuration.
 
-try:
-	outpath=FIREMSG_PATH+'/Auto/img_TF/'+time_path+'/'
-	outname=outpath+'LRIT-MSG3-TF-%s%s%s-%s.tiff' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
-	print "\nOUTPUT FORMATTING : OK\n"
-except:
-	print"\nOUTPUT FORMATTING : FAILED\n"
+	try:
+		outpath=FIREMSG_PATH+'/Auto/img_TF/'+time_path+'/'
+		outname=outpath+'LRIT-MSG3-TF-%s%s%s-%s.tiff' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
+		print "\nOUTPUT FORMATTING : OK\n"
+	except:
+		print"\nOUTPUT FORMATTING : FAILED\n"
 
-try :
-    os.makedirs(outpath)
-except:
-    print 'OUTPATH EXISTS'
+	try :
+	    os.makedirs(outpath)
+	except:
+	    print 'OUTPATH EXISTS'
 
 
-############SAVE TF FILE############
-#Sub section to save TF files.
+	############SAVE TF FILE############
+	#Sub section to save TF files.
 
-try :
-	driver=gdal.GetDriverByName("GTiff")
-	
-	driver.CreateCopy(outname,gdal_array.OpenArray(fire,None))
-	#Open new TF file
-	imgPF=gdal.Open(outname,1)
-	#Tiff projection
-	imgPF.SetGeoTransform(scr)
-	imgPF.SetProjection(proj)
-	print "\nSAVE TRUE FIRE FILE : OK\n"
-except:
-	print "\nSAVE TRUE FIRE FILE : FAILED\n"
+	try :
+		driver=gdal.GetDriverByName("GTiff")
+		
+		driver.CreateCopy(outname,gdal_array.OpenArray(fire,None))
+		#Open new TF file
+		imgPF=gdal.Open(outname,1)
+		#Tiff projection
+		imgPF.SetGeoTransform(scr)
+		imgPF.SetProjection(proj)
+		print "\nSAVE TRUE FIRE FILE : OK\n"
+	except:
+		print "\nSAVE TRUE FIRE FILE : FAILED\n"
 
 quit()

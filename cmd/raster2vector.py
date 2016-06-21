@@ -105,7 +105,7 @@ if os.path.exists(outDatafile):
 	outDriver.DeleteDataSource(outDatafile)
 
 outDataSource = outDriver.CreateDataSource(outDatafile)
-outLayer = outDataSource.CreateLayer(outDataFileName, geom_type=ogr.wkbPoint)
+outLayer = outDataSource.CreateLayer(outDataFileName, geom_type=ogr.wkbPolygon)
 
 # Add input Layer Fields to the output Layer
 tempDataLayerDefn = tempDataLayer.GetLayerDefn()
@@ -128,8 +128,7 @@ for i in range(0, tempDataLayer.GetFeatureCount()):
         outFeature.SetField(outLayerDefn.GetFieldDefn(i).GetNameRef(), inFeature.GetField(i))
     # Set geometry as centroid
     geom = inFeature.GetGeometryRef()
-    centroid = geom.Centroid()
-    outFeature.SetGeometry(centroid)
+    outFeature.SetGeometry(geom)
     # Add new feature to output Layer
     outLayer.CreateFeature(outFeature)
 

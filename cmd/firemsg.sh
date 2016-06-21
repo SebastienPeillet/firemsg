@@ -41,13 +41,14 @@ bash decompress.sh
 
 #fire_detect.sh script uses LRIT data to create brightness temperature, potentiel fire and true fire images
 bash fire_detect.sh
-
+if [ $ENABLE_FIRE_DETECTION = true ]
+then
 #convert fire from raster to vector
 bash raster2vector.sh
 
 if [ $ENABLE_POSTGRES = true ]
 then bash add2pg.sh
 fi
-
+fi
 
 exit 0

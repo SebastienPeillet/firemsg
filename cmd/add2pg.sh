@@ -15,5 +15,10 @@
 source config_firemsg.cfg
 export FIREMSG_PATH
 export ENABLE_POSTGRES
+export PG_DBNAME
+export PG_HOST
+export PG_TABLENAME
+export PG_USER
+export PG_PW
 
 python add2pg.py

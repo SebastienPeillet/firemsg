@@ -20,6 +20,7 @@ export FIREMSG_PATH
 #Threshold args
 export T039
 export T108
+export ENABLE_FIRE_DETECTION
 export delta_day
 export delta_night
 export day_start

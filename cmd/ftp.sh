@@ -15,9 +15,9 @@ source config_firemsg.cfg
 cd $FIREMSG_PATH/Auto/compressed
 
 #Connexion variables
-hostname="oisftp.eumetsat.org"
-name="lrit3h_412"
-password="QSxMzckd"
+hostname=$FTP_host
+name=$FTP_name
+password=$FTP_pw
 
 #First FTP connexion to get files list
 ftp -i -n $hostname <<EOF

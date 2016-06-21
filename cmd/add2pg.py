@@ -21,6 +21,13 @@ import psycopg2
 #Firemsg_path variable
 FIREMSG_PATH=os.environ["FIREMSG_PATH"]
 
+#Postgresql variable
+PG_DBNAME=os.environ["PG_DBNAME"]
+PG_HOST=os.environ["PG_HOST"]
+PG_TABLENAME=os.environ["PG_TABLENAME"]
+PG_USER=os.environ["PG_USER"]
+PG_PW=os.environ["PG_PW"]
+
 #Time variable
 time_path=os.environ["MSG_DATA_PATH"]
 time_tab=time_path.split('/')
@@ -37,7 +44,8 @@ inDataFileName='LRIT-MSG3-vecTF-%s%s%s-%s-WGS84' % (time_tab[0], time_tab[1], ti
 inDataFile=inDataFilePath+inDataFileName+'.shp'
 
 #Initialize connexion to pg_database
-connection=psycopg2.connect("dbname='firemsg' user='user' host='localhost' password='seasoi'")
+con_arg="dbname=%s user=%s host=%s password=%s"%(PG_DBNAME, PG_USER, PG_HOST, PG_PW)
+connection=psycopg2.connect(con_arg)
 cursor=connection.cursor()
 
 #Open data
@@ -50,5 +58,6 @@ for feature in layer :
 	time=feature.GetField("Time")
 	temp=feature.GetField("Count")
 	geom=str(feature.GetGeometryRef())
-	cursor.execute("""INSERT INTO fire(date,time,temp_kelvin,geom) VALUES (%s,%s,%s,ST_GeomFromText(%s,4326));""",(date, time, temp, geom))
+	exe_arg="""INSERT INTO %s(date,time,temp_kelvin,geom) VALUES ('%s','%s','%s',ST_GeomFromText('%s',4326));""" % (PG_TABLENAME, date, time, temp, geom)
+	cursor.execute(exe_arg)
 connection.commit()
