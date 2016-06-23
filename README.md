@@ -1,15 +1,15 @@
 # firemsg
 Dev architecture to use LRIT meteosat data
 
-This will be the build for automatic treatment for MSG LRIT DATA. 
+This will be the build for automatic process of MSG LRIT DATA, applied to fire detection. This application has been produced for the TAIMPO project. 
 The data have to be downloaded from the Eumetsat Service: http://www.eumetsat.int/website/home/index.html
-This has been produced under a Ubuntu 14.04 OS
+This has been produced under Ubuntu 14.04 and Debian Jessie.
 
 Some requierement :
   - xRITDecompress tools, free, available at http://www.eumetsat.int/website/home/Data/DataDelivery/SupportSoftwareandTools/index.html
-  - Pytroll librairies : mipp (0.9.2) and mpop (1.2.1) (https://github.com/pytroll)
-  - Gdal with python extension (2.0.2)
+  - Pytroll librairies : mipp (0.10.0), mpop (1.2.1), pyproj (1.9.5.1), pyresample (1.2.3) (https://github.com/pytroll)
+  - Gdal 1.10.1 (from distrib repository gdal-bin)
   - others to come
 
-Configuration :
-/cmd/config_firemsh.sh contains the config info
+Installation :
+Read install_cli.txt and follow instructions.

@@ -4,7 +4,7 @@ import Tix
 import ConfigParser
 import os
 
-main_variable=['FIREMSG_PATH','ENABLE_POSTGRES','PG_DBNAME','PG_TABLENAME','PG_USER','PG_PW','FTP_host','FTP_name','FTP_pw', 'PG_HOST','ENABLE_FIRE_DETECTION','SAVE_INTERMEDIATE_FILES']
+main_variable=['FIREMSG_PATH','ENABLE_POSTGRES','PG_DBNAME','PG_TABLENAME','PG_USER','PG_PW','FTP_host','FTP_name','FTP_pw', 'PG_HOST','ENABLE_FIRE_DETECTION','SAVE_INTERMEDIATE_FILES','PPP_CONFIG_DIR']
 day_process_variable=['dateDeb','dateFin','FTP_download']
 advanced_variable=['T039','T108','delta_day','delta_night','day_start','day_end','window_width','potfire_nb_limit','level_requirement']
 
@@ -39,7 +39,7 @@ class MainWindow(Tix.Tk):
 
 	def initialize(self):
 		self.grid()
-		self.geometry("445x355")
+		self.geometry("445x385")
 
 		self.configParser=GrumpyConfigParser()
 		self.configParser.optionxform = str
@@ -80,6 +80,18 @@ class MainWindow(Tix.Tk):
 		self.button1=Tkinter.Button(canvas1,text='Change',command=self.path_button)
 		self.button1.grid(row=i,column=2)
 		i+=1
+
+		#MPOP PATH
+		self.labelp1_13=Tkinter.Label(canvas1,text='MPOP_PATH :',anchor=Tkinter.W)
+		self.labelp1_13.grid(row=i,column=0)
+		self.valuep1_13=self.configParser.get('Main config',main_variable[12])
+		self.entValuep1_13=Tkinter.StringVar()
+		self.entryp1_13=Tkinter.Entry(canvas1,textvariable=self.entValuep1_13, width=30)
+		self.entryp1_13.grid(row=i,column=1)
+		self.entryp1_13.insert(0,self.valuep1_13)
+		self.button1=Tkinter.Button(canvas1,text='Change',command=self.path_button)
+		self.button1.grid(row=i,column=2)
+		i+=1		
 
 		#ENABLE FIRE DETECTION
 		self.checkValuep1_11=Tkinter.StringVar()
@@ -252,94 +264,99 @@ class MainWindow(Tix.Tk):
 		canvas2.grid(row=1,column=0)
 
 		##############################Canvas3
+		self.framep3_1=Tkinter.LabelFrame(canvas3, text='Simple Threshold')
+		self.framep3_1.grid(row=0, column=0)
 		i=0
 
 		#T039
-		self.labelp3_1=Tkinter.Label(canvas3,text=advanced_variable[0]+' :',anchor=Tkinter.W)
+		self.labelp3_1=Tkinter.Label(self.framep3_1,text=advanced_variable[0]+' :',anchor=Tkinter.W)
 		self.labelp3_1.grid(row=i,column=0)
 		self.valuep3_1=self.configParser.get('Advanced variable',advanced_variable[0])
 		self.entValuep3_1=Tkinter.StringVar()
-		self.entryp3_1=Tkinter.Entry(canvas3,textvariable=self.entValuep3_1,width=30)
+		self.entryp3_1=Tkinter.Entry(self.framep3_1,textvariable=self.entValuep3_1,width=30)
 		self.entryp3_1.grid(row=i,column=1)
 		self.entryp3_1.insert(0,self.valuep3_1)
 		i+=1
 
 		#T108
-		self.labelp3_2=Tkinter.Label(canvas3,text=advanced_variable[1]+' :',anchor=Tkinter.W)
+		self.labelp3_2=Tkinter.Label(self.framep3_1,text=advanced_variable[1]+' :',anchor=Tkinter.W)
 		self.labelp3_2.grid(row=i,column=0)
 		self.valuep3_2=self.configParser.get('Advanced variable',advanced_variable[1])
 		self.entValuep3_2=Tkinter.StringVar()
-		self.entryp3_2=Tkinter.Entry(canvas3,textvariable=self.entValuep3_2,width=30)
+		self.entryp3_2=Tkinter.Entry(self.framep3_1,textvariable=self.entValuep3_2,width=30)
 		self.entryp3_2.grid(row=i,column=1)
 		self.entryp3_2.insert(0,self.valuep3_2)
 		i+=1
 
 		#delta_day
-		self.labelp3_3=Tkinter.Label(canvas3,text=advanced_variable[2]+' :',anchor=Tkinter.W)
+		self.labelp3_3=Tkinter.Label(self.framep3_1,text=advanced_variable[2]+' :',anchor=Tkinter.W)
 		self.labelp3_3.grid(row=i,column=0)
 		self.valuep3_3=self.configParser.get('Advanced variable',advanced_variable[2])
 		self.entValuep3_3=Tkinter.StringVar()
-		self.entryp3_3=Tkinter.Entry(canvas3,textvariable=self.entValuep3_3,width=30)
+		self.entryp3_3=Tkinter.Entry(self.framep3_1,textvariable=self.entValuep3_3,width=30)
 		self.entryp3_3.grid(row=i,column=1)
 		self.entryp3_3.insert(0,self.valuep3_3)
 		i+=1
 
 		#delta_night
-		self.labelp3_4=Tkinter.Label(canvas3,text=advanced_variable[3]+' :',anchor=Tkinter.W)
+		self.labelp3_4=Tkinter.Label(self.framep3_1,text=advanced_variable[3]+' :',anchor=Tkinter.W)
 		self.labelp3_4.grid(row=i,column=0)
 		self.valuep3_4=self.configParser.get('Advanced variable',advanced_variable[3])
 		self.entValuep3_4=Tkinter.StringVar()
-		self.entryp3_4=Tkinter.Entry(canvas3,textvariable=self.entValuep3_4,width=30)
+		self.entryp3_4=Tkinter.Entry(self.framep3_1,textvariable=self.entValuep3_4,width=30)
 		self.entryp3_4.grid(row=i,column=1)
 		self.entryp3_4.insert(0,self.valuep3_4)
 		i+=1
 
 		#day_start
-		self.labelp3_5=Tkinter.Label(canvas3,text=advanced_variable[4]+' :',anchor=Tkinter.W)
+		self.labelp3_5=Tkinter.Label(self.framep3_1,text=advanced_variable[4]+' :',anchor=Tkinter.W)
 		self.labelp3_5.grid(row=i,column=0)
 		self.valuep3_5=self.configParser.get('Advanced variable',advanced_variable[4])
 		self.entValuep3_5=Tkinter.StringVar()
-		self.entryp3_5=Tkinter.Entry(canvas3,textvariable=self.entValuep3_5,width=30)
+		self.entryp3_5=Tkinter.Entry(self.framep3_1,textvariable=self.entValuep3_5,width=30)
 		self.entryp3_5.grid(row=i,column=1)
 		self.entryp3_5.insert(0,self.valuep3_5)
 		i+=1
 
 		#day_end
-		self.labelp3_6=Tkinter.Label(canvas3,text=advanced_variable[5]+' :',anchor=Tkinter.W)
+		self.labelp3_6=Tkinter.Label(self.framep3_1,text=advanced_variable[5]+' :',anchor=Tkinter.W)
 		self.labelp3_6.grid(row=i,column=0)
 		self.valuep3_6=self.configParser.get('Advanced variable',advanced_variable[5])
 		self.entValuep3_6=Tkinter.StringVar()
-		self.entryp3_6=Tkinter.Entry(canvas3,textvariable=self.entValuep3_6,width=30)
+		self.entryp3_6=Tkinter.Entry(self.framep3_1,textvariable=self.entValuep3_6,width=30)
 		self.entryp3_6.grid(row=i,column=1)
 		self.entryp3_6.insert(0,self.valuep3_6)
 		i+=1
 
+		self.framep3_2=Tkinter.LabelFrame(canvas3, text='Contextual Threshold')
+		self.framep3_2.grid(row=1, column=0)
+
 		#window_width
-		self.labelp3_7=Tkinter.Label(canvas3,text=advanced_variable[6]+' :',anchor=Tkinter.W)
+		self.labelp3_7=Tkinter.Label(self.framep3_2,text=advanced_variable[6]+' :',anchor=Tkinter.W)
 		self.labelp3_7.grid(row=i,column=0)
 		self.valuep3_7=self.configParser.get('Advanced variable',advanced_variable[6])
 		self.entValuep3_7=Tkinter.StringVar()
-		self.entryp3_7=Tkinter.Entry(canvas3,textvariable=self.entValuep3_7,width=30)
+		self.entryp3_7=Tkinter.Entry(self.framep3_2,textvariable=self.entValuep3_7,width=30)
 		self.entryp3_7.grid(row=i,column=1)
 		self.entryp3_7.insert(0,self.valuep3_7)
 		i+=1
 
 		#potfire_nb_limit
-		self.labelp3_8=Tkinter.Label(canvas3,text=advanced_variable[7]+' :',anchor=Tkinter.W)
+		self.labelp3_8=Tkinter.Label(self.framep3_2,text=advanced_variable[7]+' :',anchor=Tkinter.W)
 		self.labelp3_8.grid(row=i,column=0)
 		self.valuep3_8=self.configParser.get('Advanced variable',advanced_variable[7])
 		self.entValuep3_8=Tkinter.StringVar()
-		self.entryp3_8=Tkinter.Entry(canvas3,textvariable=self.entValuep3_8,width=30)
+		self.entryp3_8=Tkinter.Entry(self.framep3_2,textvariable=self.entValuep3_8,width=30)
 		self.entryp3_8.grid(row=i,column=1)
 		self.entryp3_8.insert(0,self.valuep3_8)
 		i+=1
 
 		#level_requierement
-		self.labelp3_9=Tkinter.Label(canvas3,text=advanced_variable[8]+' :',anchor=Tkinter.W)
+		self.labelp3_9=Tkinter.Label(self.framep3_2,text=advanced_variable[8]+' :',anchor=Tkinter.W)
 		self.labelp3_9.grid(row=i,column=0)
 		self.valuep3_9=self.configParser.get('Advanced variable',advanced_variable[8])
 		self.entValuep3_9=Tkinter.StringVar()
-		self.entryp3_9=Tkinter.Entry(canvas3,textvariable=self.entValuep3_9,width=30)
+		self.entryp3_9=Tkinter.Entry(self.framep3_2,textvariable=self.entValuep3_9,width=30)
 		self.entryp3_9.grid(row=i,column=1)
 		self.entryp3_9.insert(0,self.valuep3_9)
 		i+=1
@@ -351,12 +368,14 @@ class MainWindow(Tix.Tk):
 		self.saveButton.grid(row=i,column=1)
 		i+=1		
 
-		canvas3.grid(row=1,column=0)
+		canvas3.grid(row=0,column=0)
 
 		ongletBook.grid(row=1,column=0)
 
 	def save(self):
 		self.configParser.set('Main config','FIREMSG_PATH',self.entryp1_1.get())
+
+		self.configParser.set('Main config','PPP_CONFIG_DIR',self.entryp1_13.get())
 
 		if (self.checkValuep1_11.get()=="true"):
 			self.configParser.set('Main config','ENABLE_FIRE_DETECTION','true')
@@ -436,6 +455,8 @@ class MainWindow(Tix.Tk):
 	def reset(self):
 		self.entValuep1_1.set(self.configParser.get('Main config',main_variable[0]))
 
+		self.entValuep1_13.set(self.configParser.get('Main config',main_variable[12]))
+
 		if (self.configParser.get('Main config',main_variable[10]) == 'true'):
 			self.checkfirep1_11.select()
 		else :
@@ -500,6 +521,7 @@ class MainWindow(Tix.Tk):
 	def reset_init(self):
 		#Canvas 1
 		self.entValuep1_1.set('/home/user/firemsg')
+		self.entValuep1_13.set('/home/user/.local/lib/python2.7/site-packages/eggfolder/mpop')
 		self.checkfirep1_11.select()
 		self.checkSaveFilep1_12.select()
 		self.checkPGp1_2.select()
@@ -528,7 +550,7 @@ class MainWindow(Tix.Tk):
 
 	def launch_fd_day(self):
 		script=self.configParser.get('Main config',main_variable[0])+'/cmd/fd_day_process.sh'
-		os.popen("cd cmd;bash fd_day_process.sh")
+		os.popen("cd cmd;bash fd_day_process.sh &>/dev/null")
 
 	def path_button(self):
 		d=askdirectory()

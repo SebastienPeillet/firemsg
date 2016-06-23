@@ -11,7 +11,7 @@
 # The script will decompress all LRIT data in the compressed folder.
 ###################################################################################
 
-source config_firemsg.cfg
+source config_firemsg.cfg &>/dev/null
 
 cd $FIREMSG_PATH/Auto/compressed
 
@@ -20,7 +20,7 @@ for i in $FIREMSG_PATH/Auto/compressed/L*C_
 	do
     cd $FIREMSG_PATH/Auto/compressed
 	temp=$(basename $i)
-	echo "Conversion de : $i"
+	echo Conversion de : $i | sed 's/[[:blank:]]/\\\ /g'
 	xRITDecompress $i
 	YYYY=${temp:46:4}
 	MM=${temp:50:2}

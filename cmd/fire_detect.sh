@@ -13,7 +13,7 @@
 #
 # Thanks to Pytroll team and to OSGEO tools
 ###################################################################################
-source config_firemsg.cfg
+source config_firemsg.cfg &>/dev/null
 
 #Main_config
 export FIREMSG_PATH
@@ -30,7 +30,7 @@ export potfire_nb_limit
 export level_requirement
 
 
-export PPP_CONFIG_DIR=/home/user/.local/lib/python2.7/site-packages/mpop
+export PPP_CONFIG_DIR
 export XRIT_DECOMPRESS_PATH=/bin
 export XRIT_DECOMPRESS_OUTDIR=$FIREMSG_PATH/Auto/decompressed/etc
 python fire_detect.py

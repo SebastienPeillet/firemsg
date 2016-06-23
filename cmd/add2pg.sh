@@ -12,7 +12,7 @@
 # The script will add all vector feature into postgresql database.
 #
 ###################################################################################
-source config_firemsg.cfg
+source config_firemsg.cfg &>/dev/null
 export FIREMSG_PATH
 export ENABLE_POSTGRES
 export PG_DBNAME

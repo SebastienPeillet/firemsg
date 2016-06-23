@@ -14,7 +14,7 @@
 #
 # code inspired by the following page : https://pcjericks.github.io/py-gdalogr-cookbook/vector_layers.html
 ###################################################################################
-source config_firemsg.cfg
+source config_firemsg.cfg &>/dev/null
 export FIREMSG_PATH
 
 

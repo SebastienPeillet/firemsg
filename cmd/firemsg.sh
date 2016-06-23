@@ -13,7 +13,7 @@
 
 #PATH environment variable, needed for cronjob
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-source /home/user/firemsg/cmd/config_firemsg.cfg
+source /home/user/firemsg/cmd/config_firemsg.cfg &>/dev/null
 
 export FIREMSG_PATH
 export ENABLE_POSTGRES

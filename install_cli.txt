@@ -1,61 +1,89 @@
-#Traceur installation
+### Install instruct for Ubuntu/Debian ###
+
+# The installation need root access right.
+
+# Firemsg tools is developped in python 2.7.
+apt-get install python2.7-dev libpython-dev
+
+# We recommend you to use git and python-setuptools.
+# The packages are available with :
+apt-get install git python-setuptools
 
 
-#dependence pour installation des bibliotheques (as root)
-apt-get cmake setuptools libpython-dev g++ cmake-curses-gui build-essential qt4-dev-tools libqt4-core libqt4-dev libboost1.55-dev zlib1g-dev libopencv-dev curl libcurl4-openssl-dev swig
+## -1- Dependencies from distrib repository ##
+
+# For the GUI use Tkinter and Tix Python API :
+apt-get install python-tk tix-dev
+
+# For xRITDecompress compilation :
+apt-get install make g++
+
+# For geospatial processing :
+apt-get install python-kdtree python-numexpr python-scipy gdal-bin libgdal-dev python-gdal binutils libproj-dev libtiff5-dev libgeotiff-dev
 
 
-#PublicDecompWT (as root)
-    cd /home/user/firemsg/PublicDecompWT/xRITDecompress
-    make
-    cp xRITDecompress /usr/local/bin
+## -2- Firemsg installation ##
 
+# Firemsg architecture
+# Usually, clone in your home folder
+git clone https://github.com/SebastienPeillet/firemsg.git
 
-#Python mipp mpop (as user)
-- mpop
+# Add xRITDecompress, download link send by Eumetsat after registration at http://www.eumetsat.int/website/home/Data/DataDelivery/SupportSoftwareandTools/index.html
+cd firemsg/PublicDecomptWT
+wget [PublicDecomptWT-link]
+cd */xRITDecompress
+make
+cp xRITDecompress /usr/local/bin
 
-    cd /home/user/firemsg/python
-    git clone https://github.com/pytroll/mpop.git
-    cd mpop
-    python setup.py install --user
-    cd ../../pytroll_config
-    cp * /home/user/firemsg/python/mpop
+# Add Pytroll plugins
+cd ~/firemsg/python
+git clone https://github.com/pytroll/pyresample
+cd pyresample 
+python setup.py install --user
+cd ../
 
-- mipp
+git clone https://github.com/pytroll/mpop
+cd mpop
+python setup.py install --user
+cd ../
 
-    cd /home/user/firemsg/python
-    git clone https://github.com/pytroll/mipp.git
-    git checkout pre-master
-    git pull
-    cd mipp
-    python setup.py install --user
+git clone https://github.com/pytroll/mipp
+cd mipp
+python setup.py install --user
+cd ../
 
-#OTB http://jordiinglada.net/wp/2015/05/27/installing-otb-has-never-been-so-easy-8/
+# Pytroll config files to copy in the mopp folder (usually .local/lib/python2.7/site-packages/)
+cd ~/firemsg/pytroll_config
+cp * ~/.local/lib/python2.7/site-packages/mpop-v1.2.1-py2.7.egg/mpop
 
-    cd /home/user/firemsg
-    mkdir OTB
-    cd OTB
-    git clone https://git@git.orfeo-toolbox.org/git/otb.git OTB
-    cd ../
-    wget https://www.orfeo-toolbox.org/packages/SuperBuild-archives-trunk.tar.bz2
-    tar xvjf SuperBuild-archives-trunk.tar.bz2
-    mkdir -p SuperBuild/OTB
-    cd SuperBuild/OTB
-    cmake \
-    -DCMAKE_CXX_FLAGS:STRING=-std=c++14 \
-    -DOTB_WRAP_PYTHON:BOOL=ON \
-    -DCMAKE_BUILD_TYPE:STRING=Release \
-    -DCMAKE_INSTALL_PREFIX:PATH=/home/otb/OTB/SuperBuild/ \
-    -DDOWNLOAD_LOCATION:PATH=/home/otb/OTB/SuperBuild-archives/ \
-    -DOTB_USE_OPENJPEG:BOOL=ON \
-    -DUSE_SYSTEM_OPENJPEG:BOOL=OFF \
-    ../../OTB/SuperBuild/
-    make -j4
-    
-    cd
-    echo "\nexport OTB_HOME=${HOME}/OTB/SuperBuild\nexport PATH=${OTB_HOME}/bin:$PATH\nexport LD_LIBRARY_PATH=${OTB_HOME}/lib">>.bashrc
-    
-cmake\
-    -DCMAKE_INSTALL_PREFIX=~/ICE/install \
-    -DOTB_DIR=~/OTB/install/lib/cmake/OTB-5.0 \
-    ../ice 
+## -3- Firemsg configuration ##
+
+# You can use the GUI using :
+python ~/firemsg/firemsg_gui.py
+
+# Or directly edit the config file :
+nano ~/firemsg/cmd/config_firemsg.cfg
+
+# Variable explanation :
+
+# First onglet
+FIREMSG_PATH : path to the firemsg folder
+MPOP_PATH : path to the mpop folder
+ENABLE_FIRE_DETECTION : do fire detection process if enable, otherwise firemsg only produce BT images
+SAVE_INTERMEDIATE_FILES : keep all intermediate file if enable (BT, potential fire, true fire)
+ENABLE_POSTGRES : export fire vector to a postgresql database
+PG_DBNAME : name of your pgdatabase
+PG_HOST : host of your pgdatabase
+PG_TABLENAME : name of the table 
+PG_USER : name of the user of the pgdatabase
+FTP_host : oisftp.eumetsat.org by default, Eumetsat ftp
+FTP_name : name of your ftp account, delivered by Eumetsat
+FTP_pw : password of your ftp account, delivered by Eumetsat
+
+# Second onglet, for day process, it will process every data available between the dates
+dateDeb : begin date
+dateFin : end date
+FTP_download : enable if you don't already have the data, but beware that Eumetsat keep data only for the last 48h
+Launch Day Process button launches fd_day_process.sh
+
+# Third onglet, if you wanted to perform detection with other arg, free to you. Documentation to come.
