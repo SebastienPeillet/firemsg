@@ -25,7 +25,6 @@ bash ftp.sh
 
 #MSG_DATA_PATH environment variable, needed to access and create all path during processing
 cd $FIREMSG_PATH/Auto/compressed
-based on EPI file
 time_slot=$(ls *EPI*)
 YYYY=${time_slot:46:4}
 MM=${time_slot:50:2}
