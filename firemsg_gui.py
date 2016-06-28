@@ -4,7 +4,7 @@ import Tix
 import ConfigParser
 import os
 
-main_variable=['FIREMSG_PATH','ENABLE_POSTGRES','PG_DBNAME','PG_TABLENAME','PG_USER','PG_PW','FTP_host','FTP_name','FTP_pw', 'PG_HOST','ENABLE_FIRE_DETECTION','SAVE_INTERMEDIATE_FILES','PPP_CONFIG_DIR']
+main_variable=['FIREMSG_PATH','ENABLE_POSTGRES','PG_DBNAME','PG_TABLENAME','PG_USER','PG_PW','FTP_host','FTP_name','FTP_pw', 'PG_HOST','ENABLE_FIRE_DETECTION','SAVE_INTERMEDIATE_FILES','PPP_CONFIG_DIR','MSG_FILE_TYPE']
 day_process_variable=['dateDeb','dateFin','FTP_download']
 advanced_variable=['T039','T108','delta_day','delta_night','day_start','day_end','window_width','potfire_nb_limit','level_requirement']
 
@@ -91,7 +91,22 @@ class MainWindow(Tix.Tk):
 		self.entryp1_13.insert(0,self.valuep1_13)
 		self.button1=Tkinter.Button(canvas1,text='Change',command=self.path_button)
 		self.button1.grid(row=i,column=2)
-		i+=1		
+		i+=1
+
+		#MSG_FILE_TYPE
+		self.labelp1_14=Tkinter.Label(canvas1,text='XRIT TYPE',anchor=Tkinter.W)
+		self.labelp1_14.grid(row=i, column=0)
+		self.valuep1_14=self.configParser.get('Main config',main_variable[13])
+		self.listValuep1_14=Tkinter.StringVar()
+		self.listp1_14=Tkinter.Listbox(canvas1, listvariable=self.listValuep1_14, selectmode=Tkinter.SINGLE, height=2)
+		self.listp1_14.insert(0,"LRIT")
+		self.listp1_14.insert(1,"HRIT")
+		if self.valuep1_14=="L" :
+			self.listp1_14.selection_set(0)
+		else :
+			self.listp1_14.selection_set(1)
+		self.listp1_14.grid(row=i, column=1)
+		i+=1
 
 		#ENABLE FIRE DETECTION
 		self.checkValuep1_11=Tkinter.StringVar()
@@ -377,6 +392,12 @@ class MainWindow(Tix.Tk):
 
 		self.configParser.set('Main config','PPP_CONFIG_DIR',self.entryp1_13.get())
 
+		if ((self.listp1_14.curselection())[0])==0 :
+			self.configParser.set('Main config','MSG_FILE_TYPE','L')
+		else :
+			self.configParser.set('Main config','MSG_FILE_TYPE','H')
+				
+
 		if (self.checkValuep1_11.get()=="true"):
 			self.configParser.set('Main config','ENABLE_FIRE_DETECTION','true')
 		else:
@@ -457,6 +478,11 @@ class MainWindow(Tix.Tk):
 
 		self.entValuep1_13.set(self.configParser.get('Main config',main_variable[12]))
 
+		if self.configParser.get('Main config',main_variable[13])=="L" :
+			self.listp1_14.selection_set(0)
+		else :
+			self.listp1_14.selection_set(1)
+
 		if (self.configParser.get('Main config',main_variable[10]) == 'true'):
 			self.checkfirep1_11.select()
 		else :
@@ -522,6 +548,7 @@ class MainWindow(Tix.Tk):
 		#Canvas 1
 		self.entValuep1_1.set('/home/user/firemsg')
 		self.entValuep1_13.set('/home/user/.local/lib/python2.7/site-packages/eggfolder/mpop')
+		self.listp1_14.selection_set(0)
 		self.checkfirep1_11.select()
 		self.checkSaveFilep1_12.select()
 		self.checkPGp1_2.select()

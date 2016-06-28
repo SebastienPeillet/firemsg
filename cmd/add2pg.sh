@@ -14,6 +14,7 @@
 ###################################################################################
 source config_firemsg.cfg &>/dev/null
 export FIREMSG_PATH
+export MSG_FILE_TYPE
 export ENABLE_POSTGRES
 export PG_DBNAME
 export PG_HOST

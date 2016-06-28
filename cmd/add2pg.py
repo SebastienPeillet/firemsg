@@ -20,6 +20,7 @@ import psycopg2
 
 #Firemsg_path variable
 FIREMSG_PATH=os.environ["FIREMSG_PATH"]
+MSG_FILE_TYPE=os.environ["MSG_FILE_TYPE"]
 
 #Postgresql variable
 PG_DBNAME=os.environ["PG_DBNAME"]
@@ -40,7 +41,10 @@ mm=int((time_tab[3])[2:4])
 
 
 inDataFilePath=FIREMSG_PATH+'/Auto/vec_TF/'+time_tab[0]+'/'+time_tab[1]+'/'+time_tab[2]+'/'+time_tab[3]+'/'
-inDataFileName='LRIT-MSG3-vecTF-%s%s%s-%s-WGS84' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
+if MSG_FILE_TYPE=='L':
+	inDataFileName='LRIT-MSG3-vecTF-%s%s%s-%s-WGS84' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
+else:
+	inDataFileName='HRIT-MSG3-vecTF-%s%s%s-%s-WGS84' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
 inDataFile=inDataFilePath+inDataFileName+'.shp'
 
 #Initialize connexion to pg_database

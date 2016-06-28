@@ -60,6 +60,7 @@ except :
 	print "\nMSG_DATA_PATH UNDEFINED, YOU MUST USE BASH SCRIPT WITH 'export MSG_DATA_PATH=path/to/data'"
 
 #Threshold args
+MSG_FILE_TYPE=os.environ["MSG_FILE_TYPE"]
 ENABLE_FIRE_DETECTION=os.environ["ENABLE_FIRE_DETECTION"]
 T039=int(os.environ["T039"])
 T108=int(os.environ["T108"])
@@ -111,7 +112,10 @@ except:
 
 try:
 	outpathBT=FIREMSG_PATH+'/Auto/img_BT/'+time_path+'/'
-	file_nameBT=outpathBT+'LRIT-MSG3-BT-%s%s%s-%s' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
+	if MSG_FILE_TYPE=='L':
+		file_nameBT=outpathBT+'LRIT-MSG3-BT-%s%s%s-%s' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
+	else :
+		file_nameBT=outpathBT+'HRIT-MSG3-BT-%s%s%s-%s' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
 	print "\nOUTPUT FORMATTING : OK\n"
 except:
 	print "\nOUTPUT FORMATTING : FAILED\n"
@@ -197,7 +201,10 @@ if ENABLE_FIRE_DETECTION=='true' :
 
 	try:
 		outpath=FIREMSG_PATH+'/Auto/img_PF/'+time_path+'/'
-		outname=outpath+'LRIT-MSG3-PF-%s%s%s-%s.tiff' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
+		if MSG_FILE_TYPE=='L':
+			outname=outpath+'LRIT-MSG3-PF-%s%s%s-%s.tiff' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
+		else:
+			outname=outpath+'HRIT-MSG3-PF-%s%s%s-%s.tiff' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
 		print "\nOUTPUT FORMATTING : OK\n"
 	except:
 		print"\nOUTPUT FORMATTING : FAILED\n"
@@ -297,7 +304,10 @@ if ENABLE_FIRE_DETECTION=='true' :
 
 	try:
 		outpath=FIREMSG_PATH+'/Auto/img_TF/'+time_path+'/'
-		outname=outpath+'LRIT-MSG3-TF-%s%s%s-%s.tiff' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
+		if MSG_FILE_TYPE=='L':
+			outname=outpath+'LRIT-MSG3-TF-%s%s%s-%s.tiff' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
+		else :
+			outname=outpath+'HRIT-MSG3-TF-%s%s%s-%s.tiff' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
 		print "\nOUTPUT FORMATTING : OK\n"
 	except:
 		print"\nOUTPUT FORMATTING : FAILED\n"

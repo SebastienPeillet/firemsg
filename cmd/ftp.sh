@@ -19,12 +19,20 @@ hostname=$FTP_host
 name=$FTP_name
 password=$FTP_pw
 
+if [ $MSG_FILE_TYPE = L ]
+then path=lrit3h
+fi
+
+if [ $MSG_FILE_TYPE = H ]
+then path=hrit15m
+fi
+
 #First FTP connexion to get files list
 ftp -i -n $hostname <<EOF
 quote USER $name
 quote PASS $password
-cd lrit3h
-mls L* list.txt
+cd $path
+mls * list.txt
 quit
 EOF
 
@@ -47,7 +55,7 @@ ftp -i -n $hostname <<EOF
 quote USER $name
 quote PASS $password
 binary
-cd lrit3h
+cd $path
 mget *$time_slot*
 quit
 EOF

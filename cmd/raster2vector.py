@@ -27,6 +27,7 @@ from osgeo import gdalconst
 
 #Firemsg_path variable
 FIREMSG_PATH=os.environ["FIREMSG_PATH"]
+MSG_FILE_TYPE=os.environ["MSG_FILE_TYPE"]
 
 #Time variable
 time_path=os.environ["MSG_DATA_PATH"]
@@ -43,7 +44,10 @@ mm=int((time_tab[3])[2:4])
 
 # In data info
 inDataFilePath=FIREMSG_PATH+'/Auto/img_TF/'+time_tab[0]+'/'+time_tab[1]+'/'+time_tab[2]+'/'+time_tab[3]+'/'
-inDataFileName='LRIT-MSG3-TF-%s%s%s-%s' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
+if MSG_FILE_TYPE=='L':
+    inDataFileName='LRIT-MSG3-TF-%s%s%s-%s' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
+else:
+    inDataFileName='HRIT-MSG3-TF-%s%s%s-%s' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
 inDataFile=inDataFilePath+inDataFileName+'.tiff'
 
 # Open TF file
@@ -57,7 +61,10 @@ try :
     os.makedirs(tempDataFilePath)
 except:
 	print 'out path already exists'
-tempDataFileName='LRIT-MSG3-tvecTF-%s%s%s-%s' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
+if MSG_FILE_TYPE=='L':
+    tempDataFileName='LRIT-MSG3-tvecTF-%s%s%s-%s' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
+else:
+    tempDataFileName='HRIT-MSG3-tvecTF-%s%s%s-%s' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
 tempDataFile=tempDataFilePath+tempDataFileName+'.shp'
 
 if os.path.exists(tempDataFile):
@@ -97,7 +104,10 @@ tempDataLayer.SetAttributeFilter("Count!=0")
 
 # Output data info
 outDataFilePath=tempDataFilePath
-outDataFileName='LRIT-MSG3-vecTF-%s%s%s-%s' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
+if MSG_FILE_TYPE=='L':
+    outDataFileName='LRIT-MSG3-vecTF-%s%s%s-%s' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
+else:
+    outDataFileName='HRIT-MSG3-vecTF-%s%s%s-%s' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
 outDatafile=outDataFilePath+outDataFileName+'.shp'
 outDriver=ogr.GetDriverByName("ESRI Shapefile")
 

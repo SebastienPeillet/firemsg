@@ -17,6 +17,7 @@ source config_firemsg.cfg &>/dev/null
 
 #Main_config
 export FIREMSG_PATH
+export MSG_FILE_TYPE
 #Threshold args
 export T039
 export T108

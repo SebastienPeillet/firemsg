@@ -16,7 +16,7 @@ source config_firemsg.cfg &>/dev/null
 cd $FIREMSG_PATH/Auto/compressed
 
 #Loop to decompress LRIT data and create decompressed path, save the compressed file into archive folder
-for i in $FIREMSG_PATH/Auto/compressed/L*C_
+for i in $FIREMSG_PATH/Auto/compressed/*C_
 	do
     cd $FIREMSG_PATH/Auto/compressed
 	temp=$(basename $i)
@@ -31,7 +31,7 @@ for i in $FIREMSG_PATH/Auto/compressed/L*C_
 done
 
 #Loop to move LRIT uncompressed data to decompressed path
-for j in $FIREMSG_PATH/Auto/compressed/L*__
+for j in $FIREMSG_PATH/Auto/compressed/*__
 	do
 	cd $FIREMSG_PATH/Auto/compressed
 	cp $j $FIREMSG_PATH/Auto/archive
