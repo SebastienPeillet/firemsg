@@ -77,7 +77,7 @@ class MainWindow(Tix.Tk):
 		self.entryp1_1=Tkinter.Entry(canvas1,textvariable=self.entValuep1_1, width=30)
 		self.entryp1_1.grid(row=i,column=1)
 		self.entryp1_1.insert(0,self.valuep1_1)
-		self.button1=Tkinter.Button(canvas1,text='Change',command=self.path_button)
+		self.button1=Tkinter.Button(canvas1,text='Change',command=self.path_button1)
 		self.button1.grid(row=i,column=2)
 		i+=1
 
@@ -89,8 +89,8 @@ class MainWindow(Tix.Tk):
 		self.entryp1_13=Tkinter.Entry(canvas1,textvariable=self.entValuep1_13, width=30)
 		self.entryp1_13.grid(row=i,column=1)
 		self.entryp1_13.insert(0,self.valuep1_13)
-		self.button1=Tkinter.Button(canvas1,text='Change',command=self.path_button)
-		self.button1.grid(row=i,column=2)
+		self.button2=Tkinter.Button(canvas1,text='Change',command=self.path_button2)
+		self.button2.grid(row=i,column=2)
 		i+=1
 
 		#MSG_FILE_TYPE
@@ -579,10 +579,13 @@ class MainWindow(Tix.Tk):
 		script=self.configParser.get('Main config',main_variable[0])+'/cmd/fd_day_process.sh'
 		os.popen("cd cmd;bash fd_day_process.sh &>/dev/null")
 
-	def path_button(self):
+	def path_button1(self):
 		d=askdirectory()
 		self.entValuep1_1.set(d)
 
+	def path_button2(self):
+		d=askdirectory()
+		self.entValuep1_13.set(d)
 
 if __name__== "__main__":
 	window = MainWindow(None)
