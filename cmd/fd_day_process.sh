@@ -44,21 +44,56 @@ script3=add2pg.sh
 dateDeb=$dateDeb
 dateFin=$dateFin
 
-while [ "$dateDeb" != "$dateFin" ]; do
-	date_slot=$(date --date=$dateDeb +'%Y/%m/%d')
-	
-	time=('0245' '0545' '0845' '1145' '1445' '1745' '2045' '2345')
-	for time_slot in ${time[@]}; do
-	#Process files for one day
-		cd $FIREMSG_PATH/cmd
-		export MSG_DATA_PATH=$date_slot/$time_slot
-		echo Begin $MSG_DATA_PATH process | sed 's/[[:blank:]]/\\\ /g'
-		bash $script1
-		bash $script2
-		bash $script3
-	
+if [ $MSG_FILE_TYPE = "L" ]
+	then
+	while [ "$dateDeb" != "$dateFin" ]; do
+		date_slot=$(date --date=$dateDeb +'%Y/%m/%d')
+		
+		time=('0245' '0545' '0845' '1145' '1445' '1745' '2045' '2345')
+		for time_slot in ${time[@]}; do
+		#Process files for one day
+			cd $FIREMSG_PATH/cmd
+			export MSG_DATA_PATH=$date_slot/$time_slot
+			echo Begin $MSG_DATA_PATH process | sed 's/[[:blank:]]/\\\ /g'
+			bash $script1
+			bash $script2
+			if [ $ENABLE_POSTGRES = true ]
+				then
+				bash $script3
+			fi
+		
+		done
+		echo End $MSG_DATA_PATH process
+		dateDeb=$(date --date=$dateDeb'+1 days' +'%Y-%m-%d')
 	done
-	echo End $MSG_DATA_PATH process
-	dateDeb=$(date --date=$dateDeb'+1 days' +'%Y-%m-%d')
-done
+fi
+
+if [ $MSG_FILE_TYPE = "H" ]
+	then
+	while [ "$dateDeb" != "$dateFin" ]; do
+		date_slot=$(date --date=$dateDeb +'%Y/%m/%d')
+
+		time_slot=$(date --date=0000 +'%H%M')
+		time_end=$(date --date=2345 +'%H%M')
+		loop=0
+
+		while [ "$loop" -ne 1 ]; do
+			cd $FIREMSG_PATH/cmd
+			export MSG_DATA_PATH=$date_slot/$time_slot
+			bash $script1
+			bash $script2
+			if [ $ENABLE_POSTGRES = true ]
+				then
+				bash $script3
+			fi
+
+			if [ $time_slot = $time_end ]
+			then loop=1
+			fi
+		
+			time_slot=$(date --date=$time_slot'+15 minutes' +'%H%M');  
+		done
+		dateDeb=$(date --date=$dateDeb'+1 days' +'%Y-%m-%d')
+	done
+fi
 exit 0

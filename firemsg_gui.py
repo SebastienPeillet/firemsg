@@ -6,7 +6,7 @@ import os
 
 main_variable=['FIREMSG_PATH','ENABLE_POSTGRES','PG_DBNAME','PG_TABLENAME','PG_USER','PG_PW','FTP_host','FTP_name','FTP_pw', 'PG_HOST','ENABLE_FIRE_DETECTION','SAVE_INTERMEDIATE_FILES','PPP_CONFIG_DIR','MSG_FILE_TYPE']
 day_process_variable=['dateDeb','dateFin','FTP_download']
-advanced_variable=['T039','T108','delta_day','delta_night','day_start','day_end','window_width','potfire_nb_limit','level_requirement']
+advanced_variable=['T039','T108','delta_day','delta_night','day_start','day_end','window_width','potfire_nb_limit','level_requirement','cloud_test']
 
 class GrumpyConfigParser(ConfigParser.ConfigParser):
   """Virtually identical to the original method, but delimit keys and values with '=' instead of ' = '"""
@@ -39,7 +39,7 @@ class MainWindow(Tix.Tk):
 
 	def initialize(self):
 		self.grid()
-		self.geometry("445x385")
+		self.geometry("460x420")
 
 		self.configParser=GrumpyConfigParser()
 		self.configParser.optionxform = str
@@ -376,6 +376,15 @@ class MainWindow(Tix.Tk):
 		self.entryp3_9.insert(0,self.valuep3_9)
 		i+=1
 
+		#cloud_test
+		self.labelp3_10=Tkinter.Label(self.framep3_2,text=advanced_variable[9]+' (only HRIT) :',anchor=Tkinter.W)
+		self.labelp3_10.grid(row=i,column=0)
+		self.valuep3_10=self.configParser.get('Advanced variable',advanced_variable[9])
+		self.entValuep3_10=Tkinter.StringVar()
+		self.entryp3_10=Tkinter.Entry(self.framep3_2,textvariable=self.entValuep3_10,width=30)
+		self.entryp3_10.grid(row=i,column=1)
+		self.entryp3_10.insert(0,self.valuep3_10)
+
 		self.saveButton=Tkinter.Button(canvas3,text='Save',command=self.savep3)
 		self.saveButton.grid(row=i,column=1)
 		i+=1
@@ -464,6 +473,8 @@ class MainWindow(Tix.Tk):
 		self.configParser.set('Advanced variable','potfire_nb_limit',self.entryp3_8.get())
 		
 		self.configParser.set('Advanced variable','level_requirement',self.entryp3_9.get())
+
+		self.configParser.set('Advanced variable','cloud_test',self.entryp3_10.get())
 		
 		with open (r'cmd/config_firemsg.cfg','wb') as configfile:
 			self.configParser.write(configfile) 

@@ -29,6 +29,7 @@ export day_end
 export window_width
 export potfire_nb_limit
 export level_requirement
+export cloud_test
 
 
 export PPP_CONFIG_DIR

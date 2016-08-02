@@ -71,6 +71,8 @@ day_end=int(os.environ["day_end"])
 window_width=int(os.environ["window_width"])
 potfire_nb_limit=int(os.environ["potfire_nb_limit"])
 level_requirement=float(os.environ["level_requirement"])
+if MSG_FILE_TYPE=='H':
+	cloud_test=float(os.environ["cloud_test"])
 
 ############ DATA LOAD WITH PYTROLL############
 #Sub section for data load with pytroll
@@ -97,13 +99,26 @@ except:
 
 #Data load
 try:
-	global_data.load([3.9,10.8],area_extent=globe.area_extent,calibrate=1)
-	print global_data[3.9].data.min()
-	print global_data[3.9].data.max()
-	print global_data[10.8].data.min()
-	print global_data[10.8].data.max()
-	data=global_data.project("AfSubSahara")
-	print "\nDATA LOAD : OK"
+	if MSG_FILE_TYPE=='L':
+		IRchannelList=['IR_039','IR_108']
+		global_data.load(IRchannelList,area_extent=globe.area_extent,calibrate=1)
+		print global_data[3.9].data.min()
+		print global_data[3.9].data.max()
+		print global_data[10.8].data.min()
+		print global_data[10.8].data.max()
+		data=global_data.project("AfSubSahara")
+		print "\nDATA LOAD : OK"
+	else :
+		IRchannelList=['IR_039','IR_108','IR_120']
+		VISchannelList=['VIS006','VIS008']
+		global_data.load(IRchannelList,area_extent=globe.area_extent,calibrate=1)
+		global_data.load(VISchannelList,area_extent=globe.area_extent,calibrate=2)
+		print global_data[3.9].data.min()
+		print global_data[3.9].data.max()
+		print global_data[10.8].data.min()
+		print global_data[10.8].data.max()
+		data=global_data.project("AfSubSahara")
+		print "\nDATA LOAD : OK"
 except:
 	print"\nDATA LOAD FAILED, CHECK DATA AND TIME SLOT."
 
@@ -113,9 +128,9 @@ except:
 try:
 	outpathBT=FIREMSG_PATH+'/Auto/img_BT/'+time_path+'/'
 	if MSG_FILE_TYPE=='L':
-		file_nameBT=outpathBT+'LRIT-MSG3-BT-%s%s%s-%s' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
+		file_nameBT=outpathBT+'LRIT-MSG3-BT-%s%s%s-%s-' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
 	else :
-		file_nameBT=outpathBT+'HRIT-MSG3-BT-%s%s%s-%s' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
+		file_nameBT=outpathBT+'HRIT-MSG3-BT-%s%s%s-%s-' % (time_tab[0], time_tab[1], time_tab[2], time_tab[3])
 	print "\nOUTPUT FORMATTING : OK\n"
 except:
 	print "\nOUTPUT FORMATTING : FAILED\n"
@@ -130,26 +145,39 @@ except:
 #Sub section to save channel image. Variable to change for other use : proj, src (see above)
 
 try:
-	driver=gdal.GetDriverByName("GTiff")
-	
-	#Save 3.9um channel
-	file_nameBT039=file_nameBT+'-039.tiff'
-	driver.CreateCopy(file_nameBT039,gdal_array.OpenArray(data[3.9].data,None))
-	#Open new 3.9um tiff
-	img039=gdal.Open(file_nameBT039,1)
-	#Tiff projection
-	img039.SetGeoTransform(scr)
-	img039.SetProjection(proj)
+	if MSG_FILE_TYPE=='L':
+		driver=gdal.GetDriverByName("GTiff")
+		
+		for channel in IRchannelList:
+			#Save channel into tiff
+			file_name=file_nameBT+channel+'.tiff'
+			driver.CreateCopy(file_name,gdal_array.OpenArray(data[channel].data,None))
+			#Open new tiff
+			img=gdal.Open(file_name,1)
+			#Tiff projection
+			img.SetGeoTransform(scr)
+			img.SetProjection(proj)
 
-	#Save 3.9um channel
-	file_nameBT108=file_nameBT+'-108.tiff'
-	driver.CreateCopy(file_nameBT108,gdal_array.OpenArray(data[10.8].data,None))
-	#Open new 3.9um tiff
-	img108=gdal.Open(file_nameBT108,1)
-	#Tiff projection
-	img108.SetProjection(proj)
-	img108.SetGeoTransform(scr)
-	print "\nSAVE BRIGHTNESS TEMPERATURE FILES : OK\n"
+		print "\nSAVE BRIGHTNESS TEMPERATURE FILES : OK\n"
+
+	else :
+		driver=gdal.GetDriverByName("GTiff")
+
+		for channel in IRchannelList:
+			file_name=file_nameBT+channel+'.tiff'
+			driver.CreateCopy(file_name,gdal_array.OpenArray(data[channel].data,None))
+			img=gdal.Open(file_name,1)
+			img.SetGeoTransform(scr)
+			img.SetProjection(proj)
+
+		for channel in VISchannelList:
+			file_name=file_nameBT+channel+'.tiff'
+			driver.CreateCopy(file_name,gdal_array.OpenArray(data[channel].data,None))
+			img=gdal.Open(file_name,1)
+			img.SetGeoTransform(scr)
+			img.SetProjection(proj)
+
+		print "\nSAVE BRIGHTNESS TEMPERATURE FILES : OK\n"
 except:
 	print"\nSAVE BRIGHTNESS TEMPERATURE FILES : FAILED"
 	
@@ -159,8 +187,15 @@ if ENABLE_FIRE_DETECTION=='true' :
 	#Sub section to detect potentiel fire
 
 	#Load channel array
-	array039=global_data[3.9].data
-	array108=global_data[10.8].data
+	if MSG_FILE_TYPE=='L':
+		array039=global_data[3.9].data
+		array108=global_data[10.8].data
+	else :
+		array039=global_data[3.9].data
+		array108=global_data[10.8].data
+		array008=global_data[0.8].data
+		array006=global_data[0.6].data
+		array120=global_data[12.0].data
 
 	#Initialize potential fire array
 	[H,W]=array039.shape
@@ -171,29 +206,59 @@ if ENABLE_FIRE_DETECTION=='true' :
 	countpotf=0
 
 	#Loop to detect potential fire pixel
-	for i in range(0,H):
-		for j in range(0,W):
-			img039=array039[i,j]
-			img108=array108[i,j]
-			delta= img039-img108
-			
-			#Threshold to detect potentiel fire pixel, formula depends on time, indices can be change
-			#Day time
-			if hh >= day_start and hh< day_end:
-				if (img039>T039 and delta>delta_day and img108>T108):
-					potfire[i,j]=2
-					countpotf+=1
-				else:
-					potfire[i,j]=1
-			#Night time
-			else :
-				if img039>T039 and delta>delta_night :
-					potfire[i,j]=2
-					countpotf+=1
-				else:
-					potfire[i,j]=1
+	if MSG_FILE_TYPE=='L':
+		for i in range(0,H):
+			for j in range(0,W):
+				img039=array039[i,j]
+				img108=array108[i,j]
+				delta= img039-img108
+				
+				#Threshold to detect potentiel fire pixel, formula depends on time, indices can be change
+				#Day time
+				if hh >= day_start and hh< day_end:
+					if (img039>T039 and delta>delta_day and img108>T108):
+						potfire[i,j]=2
+						countpotf+=1
+					else:
+						potfire[i,j]=1
+				#Night time
+				else :
+					if img039>T039 and delta>delta_night :
+						potfire[i,j]=2
+						countpotf+=1
+					else:
+						potfire[i,j]=1
 
-	print countpotf
+		print countpotf
+
+	else :
+		for i in range(0,H):
+			for j in range(0,W):
+				img039=array039[i,j]
+				img108=array108[i,j]
+				img006=array006[i,j]
+				img008=array008[i,j]
+				vis_cloud=img006+img008
+				img120=array120[i,j]
+				delta= img039-img108
+				
+				#Threshold to detect potentiel fire pixel, formula depends on time, indices can be change
+				#Day time
+				if hh >= day_start and hh< day_end:
+					if (img039>T039 and delta>delta_day and img108>T108 and vis_cloud<cloud_test and img120>265):
+						potfire[i,j]=2
+						countpotf+=1
+					else:
+						potfire[i,j]=1
+				#Night time
+				else :
+					if img039>T039 and delta>delta_night :
+						potfire[i,j]=2
+						countpotf+=1
+					else:
+						potfire[i,j]=1
+
+		print countpotf	
 
 
 	############ PF OUTPUT FORMATTING ############
