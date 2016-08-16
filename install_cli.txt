@@ -58,6 +58,8 @@ cp * ~/.local/lib/python2.7/site-packages/mpop-v1.2.1-py2.7.egg/mpop
 
 ## -3- Firemsg configuration ##
 
+#At first change line 16 in cmd/firemsg.sh with your own path to your config_firemsg.cfg
+
 # You can use the GUI using :
 python ~/firemsg/firemsg_gui.py
 

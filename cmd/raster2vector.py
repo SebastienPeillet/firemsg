@@ -91,7 +91,7 @@ for i in range(0, tempDataLayer.GetFeatureCount()):
 	tempDataLayer.SetFeature(inFeature)
 
 ################ CLEAN LAYER FROM NON FIRE FEATURE ###########################
-# Sub section for clean vector TF, erase non fire polygon, convert polygons into centroids
+# Sub section for clean vector TF, erase non fire polygon
 
 # Open temp vector TF
 #inDriver=ogr.GetDriverByName("ESRI Shapefile")
@@ -136,7 +136,7 @@ for i in range(0, tempDataLayer.GetFeatureCount()):
     # Add field values from input Layer
     for i in range(0, outLayerDefn.GetFieldCount()):
         outFeature.SetField(outLayerDefn.GetFieldDefn(i).GetNameRef(), inFeature.GetField(i))
-    # Set geometry as centroid
+    # Set geometry
     geom = inFeature.GetGeometryRef()
     outFeature.SetGeometry(geom)
     # Add new feature to output Layer
