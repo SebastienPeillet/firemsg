@@ -9,7 +9,6 @@ Some requierement :
   - xRITDecompress tools, free, available at http://www.eumetsat.int/website/home/Data/DataDelivery/SupportSoftwareandTools/index.html
   - Pytroll librairies : mipp (0.10.0), mpop (1.2.1), pyproj (1.9.5.1), pyresample (1.2.3) (https://github.com/pytroll)
   - Gdal 1.10.1 (from distrib repository gdal-bin)
-  - others to come
 
 Installation :
 Read install_cli.txt and follow instructions.
