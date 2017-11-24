@@ -13,7 +13,7 @@
 
 #PATH environment variable, needed for cronjob
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-source /home/user/firemsg/cmd/config_firemsg.cfg &>/dev/null
+source /home/pi/firemsg/cmd/config_firemsg.cfg &>/dev/null
 
 export FIREMSG_PATH
 export ENABLE_POSTGRES
@@ -48,6 +48,14 @@ bash raster2vector.sh
 if [ $ENABLE_POSTGRES = true ]
 then bash add2pg.sh
 fi
+fi
+
+if [ $SAVE_INTERMEDIATE_FILES = false ]
+then
+rm $FIREMSG_PATH/Auto/archive/*
+rm $FIREMSG_PATH/Auto/img_TF/$YYYY/$MM/$DD/$HHMM/*
+rm $FIREMSG_PATH/Auto/img_PF/$YYYY/$MM/$DD/$HHMM/*
+rm $FIREMSG_PATH/Auto/img_BT/$YYYY/$MM/$DD/$HHMM/*
 fi
 
 exit 0
